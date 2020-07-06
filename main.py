@@ -33,31 +33,36 @@ class PlayingCard:
     def __str__(self) -> str:
         return f"{self.card_value}, {self.suite}"
     
-    @staticmethod
-    def make_cards():
+    @classmethod
+    def make_cards(cls):
         """Creates playing cards
         """
         global names
 
         i = 0
         while i < 13:
-            PlayingCard.hearts[names[i]] = PlayingCard(i+1, 'hearts', (i+1) * 57, 400)           
+            cls.hearts[names[i]] = PlayingCard(i+1, 'hearts', (i+1) * 57, 400)           
             i += 1
 
         j = 0
         while j < 13:
-            PlayingCard.diamonds[names[j]] = PlayingCard(j+1, 'diamonds', (j+1) * 57, 325)            
+            cls.diamonds[names[j]] = PlayingCard(j+1, 'diamonds', (j+1) * 57, 325)            
             j += 1
 
         k = 0
         while k < 13:
-            PlayingCard.spades[names[k]] = PlayingCard(k+1, 'spades', (k+1) * 57, 250)          
+            cls.spades[names[k]] = PlayingCard(k+1, 'spades', (k+1) * 57, 250)          
             k += 1
 
         l = 0
         while l < 13:
-            PlayingCard.clubs[names[l]] = PlayingCard(l+1, 'clubs', (l+1) * 57, 175)            
+            cls.clubs[names[l]] = PlayingCard(l+1, 'clubs', (l+1) * 57, 175)            
             l += 1
+
+    @classmethod
+    def shuffle_cards(cls):
+        """ Rearranges the order of the cards in full_deck or creates a new list with the cards shuffled
+        """
 
 
 class MyGame(arcade.Window):
@@ -90,6 +95,7 @@ class MyGame(arcade.Window):
             arcade.draw_text(names[i], list(PlayingCard.hearts.values())[i].x-card_width//4, list(PlayingCard.hearts.values())[i].y, color=arcade.color.WHITE)
             arcade.draw_text("hearts", list(PlayingCard.hearts.values())[i].x-card_width//3, list(PlayingCard.hearts.values())[i].y-10, arcade.color.WHITE, font_size=8)
             i += 1
+
 
         # draws diamonds playing cards
         for card in PlayingCard.diamonds.values():
