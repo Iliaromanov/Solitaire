@@ -179,6 +179,8 @@ class MyGame(arcade.Window):
                 card.x = deal_slot_x
                 card.y = deal_slot_y
 
+            PlayingCard.shuffle_cards()
+
         print(pick_up_card)
 
     def on_mouse_release(self, x, y, button, key_modifiers):
