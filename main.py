@@ -86,14 +86,14 @@ class MyGame(arcade.Window):
         pass
 
     def on_draw(self):
-        arcade.start_render()  # keep as first line
+        arcade.start_render()
 
-        # Draw everything below here.
+
         global card_height, card_height
         global deal_slot_x, deal_slot_y
         global names
 
-        # draws hearts playing cards
+        # draw hearts playing cards
         for card in PlayingCard.hearts.values():
             arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)
 
@@ -104,7 +104,7 @@ class MyGame(arcade.Window):
             i += 1
 
 
-        # draws diamonds playing cards
+        # draw diamonds playing cards
         for card in PlayingCard.diamonds.values():
             arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)
 
@@ -114,7 +114,7 @@ class MyGame(arcade.Window):
             arcade.draw_text("diamonds", list(PlayingCard.diamonds.values())[i].x-card_width//2, list(PlayingCard.diamonds.values())[i].y-10, color=arcade.color.WHITE, font_size=8)
             i += 1
 
-        # draws spades playing cards
+        # draw spades playing cards
         for card in PlayingCard.spades.values():
             arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.BLACK)
 
@@ -124,7 +124,7 @@ class MyGame(arcade.Window):
             arcade.draw_text("spades", list(PlayingCard.spades.values())[i].x-card_width//3, list(PlayingCard.spades.values())[i].y-10, arcade.color.WHITE, font_size=8)
             i += 1
 
-        # draws clubs playing cards
+        # draw clubs playing cards
         for card in PlayingCard.clubs.values():
             arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.BLACK)
 
@@ -134,12 +134,15 @@ class MyGame(arcade.Window):
             arcade.draw_text("clubs", list(PlayingCard.clubs.values())[i].x-card_width//3, list(PlayingCard.clubs.values())[i].y-10, arcade.color.WHITE, font_size=8)
             i += 1
 
-        # draws slots for cards
+        # draw slots for cards
         arcade.draw_rectangle_outline(deal_slot_x, deal_slot_y, card_width, card_height, arcade.color.BLUE)
 
         for num in range(4):
-            arcade.draw_xywh_rectangle_outline(550 + num*50, 475, card_width, card_height, arcade.color.BLUE) 
+            arcade.draw_xywh_rectangle_outline(550 + num*50, 475, card_width, card_height, arcade.color.BLUE)
 
+        # draw shuffle button used to put cards into playing formation
+
+        
 
     def update(self, delta_time):
         """
