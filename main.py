@@ -1,4 +1,5 @@
 import arcade
+import random
 
 WIDTH = 800
 HEIGHT = 600
@@ -61,8 +62,14 @@ class PlayingCard:
 
     @classmethod
     def shuffle_cards(cls):
-        """ Rearranges the order of the cards in full_deck or creates a new list with the cards shuffled
+        """ Creates a new list with the order of the cards in full_deck out of order
         """
+
+        shuffled = []
+
+        for i in random.randrange(53):
+            if cls.full_deck[i] not in shuffled:
+                shuffled.append(cls.full_deck[i])
 
 
 class MyGame(arcade.Window):
