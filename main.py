@@ -140,7 +140,8 @@ class MyGame(arcade.Window):
         for num in range(4):
             arcade.draw_xywh_rectangle_outline(550 + num*50, 475, card_width, card_height, arcade.color.BLUE)
 
-        # draw shuffle button used to put cards into playing formation
+        # draw shuffle button used to shuffle and put the cards into playing formation
+        arcade.draw_xywh_rectangle_filled(550, 50, 150, 50, arcade.color.GUPPIE_GREEN)
 
         
 
