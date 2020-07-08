@@ -143,7 +143,7 @@ class MyGame(arcade.Window):
         # draw shuffle button used to shuffle and put the cards into playing formation
         arcade.draw_xywh_rectangle_filled(550, 50, 150, 50, arcade.color.GUPPIE_GREEN)
 
-        
+        arcade.draw_text('Shuffle', 590s, 65, arcade.color.BLACK, 20)
 
     def update(self, delta_time):
         """
