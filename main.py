@@ -6,7 +6,6 @@ HEIGHT = 600
 
 pick_up_card = False
 using_card = None
-shuffle = False
 
 card_width = 40
 card_height = 70
@@ -15,6 +14,8 @@ deal_slot_x = 57
 deal_slot_y = 510
 
 names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
+shuffled_cards = []
+
 
 class PlayingCard:
     """Creates and organizes the playing cards
@@ -65,8 +66,9 @@ class PlayingCard:
     def shuffle_cards(cls):
         """ Creates a new list with the order of the cards in full_deck out of order
         """
+        global shuffled_cards
 
-        random.shuffle(cls.full_deck, len(full_deck))
+        shuffled_cards = random.sample(cls.full_deck, len(cls.full_deck))
 
 
 class MyGame(arcade.Window):
@@ -182,7 +184,6 @@ class MyGame(arcade.Window):
         global pick_up_card, using_card
         global deal_slot_x, deal_slot_y
         global card_height, card_height
-        global shuffle
 
         for card in PlayingCard.full_deck:
             if x in range(card.x-card_width//2, card.x+card_width//2) and y in range(card.y-card_height//2, card.y+card_height//2):
@@ -195,10 +196,8 @@ class MyGame(arcade.Window):
                 card.y = deal_slot_y
 
         if x in range(550, 701) and y in range(50, 101):
-            shuffle = True
             PlayingCard.shuffle_cards()
 
-        print(shuffle)
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """
