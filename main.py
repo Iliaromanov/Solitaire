@@ -66,11 +66,7 @@ class PlayingCard:
         """ Creates a new list with the order of the cards in full_deck out of order
         """
 
-        shuffled = []
-
-        for i in random.randrange(53):
-            if cls.full_deck[i] not in shuffled:
-                shuffled.append(cls.full_deck[i])
+        random.shuffle(cls.full_deck, len(full_deck))
 
 
 class MyGame(arcade.Window):
