@@ -186,6 +186,7 @@ class MyGame(arcade.Window):
         global pick_up_card, using_card
         global deal_slot_x, deal_slot_y
         global card_height, card_height
+        global shuffle
 
         for card in PlayingCard.full_deck:
             if x in range(card.x-card_width//2, card.x+card_width//2) and y in range(card.y-card_height//2, card.y+card_height//2):
@@ -197,9 +198,11 @@ class MyGame(arcade.Window):
                 card.x = deal_slot_x
                 card.y = deal_slot_y
 
+        if x in range(550, 701) and y in range(50, 101):
+            shuffle = True
             PlayingCard.shuffle_cards()
 
-        print(pick_up_card)
+        print(shuffle)
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """
