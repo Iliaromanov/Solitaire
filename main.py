@@ -6,6 +6,7 @@ HEIGHT = 600
 
 pick_up_card = False
 using_card = None
+shuffle = False
 
 card_width = 40
 card_height = 70
