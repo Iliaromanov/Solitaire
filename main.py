@@ -141,8 +141,8 @@ class MyGame(arcade.Window):
 
         # draw shuffle button used to shuffle and put the cards into playing formation
         arcade.draw_xywh_rectangle_filled(550, 50, 150, 50, arcade.color.GUPPIE_GREEN)
-
         arcade.draw_text('Shuffle', 590, 65, arcade.color.BLACK, 20)
+
 
     def update(self, delta_time):
         """
@@ -150,7 +150,10 @@ class MyGame(arcade.Window):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-        pass
+        
+        # puts cards in playing position
+
+        
 
     def on_key_press(self, key, key_modifiers):
         """
@@ -189,7 +192,7 @@ class MyGame(arcade.Window):
             if x in range(card.x-card_width//2, card.x+card_width//2) and y in range(card.y-card_height//2, card.y+card_height//2):
                 pick_up_card = True
                 using_card = card
-
+        
         if x in range(deal_slot_x-card_width//2, deal_slot_x+card_width//2) and y in range(deal_slot_y-card_height//2, deal_slot_y+card_height//2):
             for card in PlayingCard.full_deck:
                 card.x = deal_slot_x
