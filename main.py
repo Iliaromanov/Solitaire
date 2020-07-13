@@ -31,6 +31,7 @@ class PlayingCard:
         self.suite = suite
         self.x = x
         self.y = y
+        self.flipped = True
         PlayingCard.full_deck.append(self)
 
     def __str__(self) -> str:
