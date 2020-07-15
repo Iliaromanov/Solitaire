@@ -13,7 +13,7 @@ card_height = 70
 deal_slot_x = 57
 deal_slot_y = 510
 
-names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
+card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 shuffled_cards = []
 
 
@@ -41,26 +41,26 @@ class PlayingCard:
     def make_cards(cls):
         """Creates playing cards
         """
-        global names
+        global card_names
 
         i = 0
         while i < 13:
-            cls.hearts[names[i]] = PlayingCard(i+1, 'hearts', (i+1) * 57, 400)           
+            cls.hearts[card_names[i]] = PlayingCard(i+1, 'hearts', (i+1) * 57, 400)           
             i += 1
 
         j = 0
         while j < 13:
-            cls.diamonds[names[j]] = PlayingCard(j+1, 'diamonds', (j+1) * 57, 325)            
+            cls.diamonds[card_names[j]] = PlayingCard(j+1, 'diamonds', (j+1) * 57, 325)            
             j += 1
 
         k = 0
         while k < 13:
-            cls.spades[names[k]] = PlayingCard(k+1, 'spades', (k+1) * 57, 250)          
+            cls.spades[card_names[k]] = PlayingCard(k+1, 'spades', (k+1) * 57, 250)          
             k += 1
 
         l = 0
         while l < 13:
-            cls.clubs[names[l]] = PlayingCard(l+1, 'clubs', (l+1) * 57, 175)            
+            cls.clubs[card_names[l]] = PlayingCard(l+1, 'clubs', (l+1) * 57, 175)            
             l += 1
 
     @classmethod
@@ -88,10 +88,9 @@ class MyGame(arcade.Window):
     def on_draw(self):
         arcade.start_render()
 
-
         global card_height, card_height
         global deal_slot_x, deal_slot_y
-        global names
+        global card_names
 
         # draw hearts playing cards
         for card in PlayingCard.hearts.values():
@@ -99,8 +98,9 @@ class MyGame(arcade.Window):
 
         i = 0
         while i < 13:
-            arcade.draw_text(names[i], list(PlayingCard.hearts.values())[i].x-card_width//4, list(PlayingCard.hearts.values())[i].y, color=arcade.color.WHITE)
-            arcade.draw_text("hearts", list(PlayingCard.hearts.values())[i].x-card_width//3, list(PlayingCard.hearts.values())[i].y-10, arcade.color.WHITE, font_size=8)
+            if list(PlayingCard.hearts.values())[i].flipped:
+                arcade.draw_text(card_names[i], list(PlayingCard.hearts.values())[i].x-card_width//4, list(PlayingCard.hearts.values())[i].y, color=arcade.color.WHITE)
+                arcade.draw_text("hearts", list(PlayingCard.hearts.values())[i].x-card_width//3, list(PlayingCard.hearts.values())[i].y-10, arcade.color.WHITE, font_size=8)
             i += 1
 
 
@@ -110,7 +110,7 @@ class MyGame(arcade.Window):
 
         i = 0
         while i < 13:
-            arcade.draw_text(names[i], list(PlayingCard.diamonds.values())[i].x-card_width//4, list(PlayingCard.diamonds.values())[i].y, color=arcade.color.WHITE)
+            arcade.draw_text(card_names[i], list(PlayingCard.diamonds.values())[i].x-card_width//4, list(PlayingCard.diamonds.values())[i].y, color=arcade.color.WHITE)
             arcade.draw_text("diamonds", list(PlayingCard.diamonds.values())[i].x-card_width//2, list(PlayingCard.diamonds.values())[i].y-10, color=arcade.color.WHITE, font_size=8)
             i += 1
 
@@ -120,7 +120,7 @@ class MyGame(arcade.Window):
 
         i = 0
         while i < 13:
-            arcade.draw_text(names[i], list(PlayingCard.spades.values())[i].x-card_width//4, list(PlayingCard.spades.values())[i].y, color=arcade.color.WHITE)
+            arcade.draw_text(card_names[i], list(PlayingCard.spades.values())[i].x-card_width//4, list(PlayingCard.spades.values())[i].y, color=arcade.color.WHITE)
             arcade.draw_text("spades", list(PlayingCard.spades.values())[i].x-card_width//3, list(PlayingCard.spades.values())[i].y-10, arcade.color.WHITE, font_size=8)
             i += 1
 
@@ -130,7 +130,7 @@ class MyGame(arcade.Window):
 
         i = 0
         while i < 13:
-            arcade.draw_text(names[i], list(PlayingCard.clubs.values())[i].x-card_width//4, list(PlayingCard.clubs.values())[i].y, color=arcade.color.WHITE)
+            arcade.draw_text(card_names[i], list(PlayingCard.clubs.values())[i].x-card_width//4, list(PlayingCard.clubs.values())[i].y, color=arcade.color.WHITE)
             arcade.draw_text("clubs", list(PlayingCard.clubs.values())[i].x-card_width//3, list(PlayingCard.clubs.values())[i].y-10, arcade.color.WHITE, font_size=8)
             i += 1
 
@@ -193,6 +193,7 @@ class MyGame(arcade.Window):
             if x in range(card.x-card_width//2, card.x+card_width//2) and y in range(card.y-card_height//2, card.y+card_height//2):
                 pick_up_card = True
                 using_card = card
+                card.flipped = not card.flipped
         
         if x in range(deal_slot_x-card_width//2, deal_slot_x+card_width//2) and y in range(deal_slot_y-card_height//2, deal_slot_y+card_height//2):
             for card in PlayingCard.full_deck:
