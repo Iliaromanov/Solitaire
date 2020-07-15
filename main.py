@@ -188,21 +188,25 @@ class MyGame(arcade.Window):
         """
         Called when the user presses a mouse button.
         """
+        
         global pick_up_card, using_card
         global deal_slot_x, deal_slot_y
         global card_height, card_height
 
+        # Picking up and clicking on individual cards
         for card in PlayingCard.full_deck:
             if x in range(card.x-card_width//2, card.x+card_width//2) and y in range(card.y-card_height//2, card.y+card_height//2):
                 pick_up_card = True
                 using_card = card
                 card.flipped = not card.flipped
         
+        # Useless deal slot function 
         if x in range(deal_slot_x-card_width//2, deal_slot_x+card_width//2) and y in range(deal_slot_y-card_height//2, deal_slot_y+card_height//2):
             for card in PlayingCard.full_deck:
                 card.x = deal_slot_x
                 card.y = deal_slot_y
 
+        # shuffle button
         if x in range(550, 701) and y in range(50, 101):
             PlayingCard.shuffle_cards()
 
