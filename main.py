@@ -65,7 +65,7 @@ class PlayingCard:
 
     @classmethod
     def shuffle_cards(cls):
-        """ Creates a new list with the order of the cards in full_deck out of order
+        """ Rearanges the order of the cards in full_deck and stores the new list in the shuffled_cards variable
         """
         global shuffled_cards
 
