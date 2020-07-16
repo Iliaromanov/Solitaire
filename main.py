@@ -149,6 +149,7 @@ class MyGame(arcade.Window):
                 if card.flipped:
                     arcade.draw_text(card_names[card.value-1], card.x-card_width//4, card.y, color=arcade.color.WHITE)
                     arcade.draw_text(card.suite, card.x-card_width//3, card.y-10, arcade.color.WHITE, font_size=8)
+            
                 
         # draw slots for cards
         arcade.draw_rectangle_outline(deal_slot_x, deal_slot_y, card_width, card_height, arcade.color.BLUE)
@@ -161,7 +162,6 @@ class MyGame(arcade.Window):
         arcade.draw_text('Shuffle', 590, 65, arcade.color.BLACK, 20)
 
 
-
     def update(self, delta_time):
         """
         All the logic to move, and the game logic goes here.
@@ -170,6 +170,10 @@ class MyGame(arcade.Window):
         """
         global shuffled_cards
         global start_game
+        global using_card
+
+        if using_card != None:
+            using_card.redraw = True
 
         # playing formation
         if start_game:
@@ -229,7 +233,6 @@ class MyGame(arcade.Window):
                 pick_up_card = True
                 using_card = card
                 card.flipped = not card.flipped
-                card.redraw = True
         
         # Useless deal slot function 
         if x in range(deal_slot_x-card_width//2, deal_slot_x+card_width//2) and y in range(deal_slot_y-card_height//2, deal_slot_y+card_height//2):
