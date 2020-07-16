@@ -103,7 +103,6 @@ class MyGame(arcade.Window):
                 arcade.draw_text("hearts", list(PlayingCard.hearts.values())[i].x-card_width//3, list(PlayingCard.hearts.values())[i].y-10, arcade.color.WHITE, font_size=8)
             i += 1
 
-
         # draw diamonds playing cards
         for card in PlayingCard.diamonds.values():
             arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)
@@ -155,9 +154,6 @@ class MyGame(arcade.Window):
         need it.
         """
         
-        # puts cards in playing position
-
-        
 
     def on_key_press(self, key, key_modifiers):
         """
@@ -188,7 +184,6 @@ class MyGame(arcade.Window):
         """
         Called when the user presses a mouse button.
         """
-        
         global pick_up_card, using_card
         global deal_slot_x, deal_slot_y
         global card_height, card_height
