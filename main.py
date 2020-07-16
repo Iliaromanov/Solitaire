@@ -27,8 +27,8 @@ class PlayingCard:
     spades = {}
     clubs = {}
 
-    def __init__(self, card_value: int, suite: str, x: int, y: int):
-        self.card_value = card_value
+    def __init__(self, value: int, suite: str, x: int, y: int):
+        self.value = value
         self.suite = suite
         self.x = x
         self.y = y
@@ -37,7 +37,7 @@ class PlayingCard:
         PlayingCard.full_deck.append(self)
 
     def __str__(self) -> str:
-        return f"{self.card_value}, {self.suite}"
+        return f"{self.value}, {self.suite}"
     
     @classmethod
     def make_cards(cls):
@@ -140,11 +140,15 @@ class MyGame(arcade.Window):
         # redraw card
         for card in PlayingCard.full_deck:
             if card.redraw:
-                if card.suite == 'hearts' or card.suite == 'diamonds'
+                if card.suite == 'hearts' or card.suite == 'diamonds':
                     arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)
+                    
                 else:
                     arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.BLACK)
-                card.redraw = False
+
+                if card.flipped:
+                    arcade.draw_text(card_names[card.value-1], card.x-card_width//4, card.y, color=arcade.color.WHITE)
+                    arcade.draw_text(card.suite, card.x-card_width//3, card.y-10, arcade.color.WHITE, font_size=8)
                 
         # draw slots for cards
         arcade.draw_rectangle_outline(deal_slot_x, deal_slot_y, card_width, card_height, arcade.color.BLUE)
