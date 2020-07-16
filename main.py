@@ -4,6 +4,7 @@ import random
 WIDTH = 800
 HEIGHT = 600
 
+start_game = False
 pick_up_card = False
 using_card = None
 
@@ -31,7 +32,8 @@ class PlayingCard:
         self.suite = suite
         self.x = x
         self.y = y
-        self.flipped = True
+        self.flipped = False
+        self.redraw = False
         PlayingCard.full_deck.append(self)
 
     def __str__(self) -> str:
@@ -87,10 +89,9 @@ class MyGame(arcade.Window):
 
     def on_draw(self):
         arcade.start_render()
-
-        global card_height, card_height
-        global deal_slot_x, deal_slot_y
-        global card_names
+        global start_game
+        global card_height, card_height, card_names
+        global deal_slot_x, deal_slot_y 
 
         # draw hearts playing cards
         for card in PlayingCard.hearts.values():
@@ -136,6 +137,15 @@ class MyGame(arcade.Window):
                 arcade.draw_text("clubs", list(PlayingCard.clubs.values())[i].x-card_width//3, list(PlayingCard.clubs.values())[i].y-10, arcade.color.WHITE, font_size=8)
             i += 1
 
+        # redraw card
+        for card in PlayingCard.full_deck:
+            if card.redraw:
+                if card.suite == 'hearts' or card.suite == 'diamonds'
+                    arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)
+                else:
+                    arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.BLACK)
+                card.redraw = False
+                
         # draw slots for cards
         arcade.draw_rectangle_outline(deal_slot_x, deal_slot_y, card_width, card_height, arcade.color.BLUE)
 
@@ -147,13 +157,33 @@ class MyGame(arcade.Window):
         arcade.draw_text('Shuffle', 590, 65, arcade.color.BLACK, 20)
 
 
+
     def update(self, delta_time):
         """
         All the logic to move, and the game logic goes here.
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-        
+        global shuffled_cards
+        global start_game
+
+        # playing formation
+        if start_game:
+            for card in shuffled_cards:
+                print(card)
+            '''
+            for card in shuffled_cards: 
+                for row_num in range(7):
+                    for row_len in range(7 - row_num):
+                        if row_len == 0:
+                            card.flipped = True
+                        else:
+                            card.flipped = False
+                        
+                        card.x = 57 * (row_len + 1)
+                        card.y = 400
+            '''
+            start_game = False
 
     def on_key_press(self, key, key_modifiers):
         """
@@ -187,6 +217,7 @@ class MyGame(arcade.Window):
         global pick_up_card, using_card
         global deal_slot_x, deal_slot_y
         global card_height, card_height
+        global start_game
 
         # Picking up and clicking on individual cards
         for card in PlayingCard.full_deck:
@@ -194,6 +225,7 @@ class MyGame(arcade.Window):
                 pick_up_card = True
                 using_card = card
                 card.flipped = not card.flipped
+                card.redraw = True
         
         # Useless deal slot function 
         if x in range(deal_slot_x-card_width//2, deal_slot_x+card_width//2) and y in range(deal_slot_y-card_height//2, deal_slot_y+card_height//2):
@@ -204,6 +236,7 @@ class MyGame(arcade.Window):
         # shuffle button
         if x in range(550, 701) and y in range(50, 101):
             PlayingCard.shuffle_cards()
+            start_game = True
 
 
     def on_mouse_release(self, x, y, button, key_modifiers):
