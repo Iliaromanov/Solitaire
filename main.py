@@ -186,7 +186,7 @@ class MyGame(arcade.Window):
                             card.flipped = False
                         '''    
                         card.x = 114 * (row_len + 1)
-                        card.y = 400 / (row_num +1)
+                        card.y = 400 / (row_num +1) # work in progress/place-holder for the real y equation
                         
                         i += 1
 
