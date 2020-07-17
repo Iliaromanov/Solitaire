@@ -32,7 +32,7 @@ class PlayingCard:
         self.suite = suite
         self.x = x
         self.y = y
-        self.flipped = False
+        self.flipped = True
         self.redraw = False
         PlayingCard.full_deck.append(self)
 
@@ -172,25 +172,25 @@ class MyGame(arcade.Window):
         global start_game
         global using_card
 
-        if using_card != None:
-            using_card.redraw = True
-
         # playing formation
         if start_game:
-            for card in shuffled_cards:
-                print(card)
-            '''
-            for card in shuffled_cards: 
+            i = 0
+            while i < 28:
                 for row_num in range(7):
                     for row_len in range(7 - row_num):
+                        card = shuffled_cards[i]    
+                        '''
                         if row_len == 0:
                             card.flipped = True
                         else:
                             card.flipped = False
+                        '''    
+                        card.x = 114 * (row_len + 1)
+                        card.y = 400 / (row_num +1)
                         
-                        card.x = 57 * (row_len + 1)
-                        card.y = 400
-            '''
+                        i += 1
+
+                        # print(f"row_len: {row_len}, row_num: {row_num}, i: {i}")
             start_game = False
 
     def on_key_press(self, key, key_modifiers):
@@ -232,7 +232,7 @@ class MyGame(arcade.Window):
             if x in range(card.x-card_width//2, card.x+card_width//2) and y in range(card.y-card_height//2, card.y+card_height//2):
                 pick_up_card = True
                 using_card = card
-                card.flipped = not card.flipped
+                # card.flipped = not card.flipped
         
         # Useless deal slot function 
         if x in range(deal_slot_x-card_width//2, deal_slot_x+card_width//2) and y in range(deal_slot_y-card_height//2, deal_slot_y+card_height//2):
