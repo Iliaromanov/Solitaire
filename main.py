@@ -177,14 +177,18 @@ class MyGame(arcade.Window):
             while i < 28:
                 for row_num in range(7):
                     for row_len in range(7 - row_num):
-                        card = shuffled_cards[i]    
+
+                        card = shuffled_cards[i] 
+
+                        start_x = 114    
                         '''
                         if row_len == 0:
                             card.flipped = True
                         else:
                             card.flipped = False
                         '''    
-                        card.x = 114 * (row_len + row_num) # work in progress/place-holder for the real x equation
+                        card.x = start_x + 57 * (row_len)
+
                         card.y = 400 / (row_num +1) # work in progress/place-holder for the real y equation
                         
                         i += 1
