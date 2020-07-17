@@ -168,9 +168,8 @@ class MyGame(arcade.Window):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-        global shuffled_cards
+        global shuffled_cards, deal_slot_x, deal_slot_y, card_width, card_height
         global start_game
-        global using_card
 
         # playing formation
         if start_game:
@@ -185,13 +184,19 @@ class MyGame(arcade.Window):
                         else:
                             card.flipped = False
                         '''    
-                        card.x = 114 * (row_len + 1)
+                        card.x = 114 * (row_len + row_num) # work in progress/place-holder for the real x equation
                         card.y = 400 / (row_num +1) # work in progress/place-holder for the real y equation
                         
                         i += 1
 
                         # print(f"row_len: {row_len}, row_num: {row_num}, i: {i}")
+
+            for card in shuffled_cards[28:]:
+                card.x = deal_slot_x
+                card.y = deal_slot_y
+
             start_game = False
+
 
     def on_key_press(self, key, key_modifiers):
         """
