@@ -174,26 +174,25 @@ class MyGame(arcade.Window):
         # playing formation
         if start_game:
             i = 0
-            while i < 28:
+            while i < 28:                            # places the first 28 cards in playing position
                 for row_num in range(7):
                     for row_len in range(7 - row_num):
 
                         card = shuffled_cards[i] 
-
                         end_x = 456    
-                        '''
-                        if row_len == 0:
+
+                        card.x = end_x - 57 * (row_len)
+                        card.y = 400 - card_height // 2 * (row_num) 
+                        
+                        if row_len == 6 - row_num:
                             card.flipped = True
                         else:
                             card.flipped = False
-                        '''    
-                        card.x = end_x - 57 * (row_len)
-
-                        card.y = 400 - card_height // 2 * (row_num) 
-                        
+                                                
                         i += 1
 
-            for card in shuffled_cards[28:]:
+            for card in shuffled_cards[28:]:        # places the remaining cards into the deal slot
+                card.flipped = False
                 card.x = deal_slot_x
                 card.y = deal_slot_y
 
@@ -248,7 +247,7 @@ class MyGame(arcade.Window):
                 card.x = deal_slot_x
                 card.y = deal_slot_y
         '''
-        
+
         # shuffle button
         if x in range(550, 701) and y in range(50, 101):
             PlayingCard.shuffle_cards()
