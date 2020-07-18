@@ -177,12 +177,12 @@ class MyGame(arcade.Window):
                     for row_len in range(7 - row_num):
 
                         card = shuffled_cards[i] 
-                        end_x = 456    
+                        start_x = 114 + row_num*57    
 
-                        card.x = end_x - 57 * (row_len)
+                        card.x = start_x + 57 * (row_len)
                         card.y = 400 - card_height // 2 * (row_num) 
                         
-                        if row_len == 6 - row_num:
+                        if row_len == 0:
                             card.flipped = True
                         else:
                             card.flipped = False
@@ -236,7 +236,7 @@ class MyGame(arcade.Window):
             if x in range(card.x-card_width//2, card.x+card_width//2) and y in range(card.y-card_height//2, card.y+card_height//2):
                 pick_up_card = True
                 using_card = card
-                # card.flipped = not card.flipped
+                card.flipped = not card.flipped
         
         # Useless deal slot function
         ''' 
