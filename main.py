@@ -180,20 +180,18 @@ class MyGame(arcade.Window):
 
                         card = shuffled_cards[i] 
 
-                        start_x = 114    
+                        end_x = 456    
                         '''
                         if row_len == 0:
                             card.flipped = True
                         else:
                             card.flipped = False
                         '''    
-                        card.x = start_x + 57 * (row_len)
+                        card.x = end_x - 57 * (row_len)
 
-                        card.y = 400 / (row_num +1) # work in progress/place-holder for the real y equation
+                        card.y = 400 - card_height // 2 * (row_num) 
                         
                         i += 1
-
-                        # print(f"row_len: {row_len}, row_num: {row_num}, i: {i}")
 
             for card in shuffled_cards[28:]:
                 card.x = deal_slot_x
@@ -243,12 +241,14 @@ class MyGame(arcade.Window):
                 using_card = card
                 # card.flipped = not card.flipped
         
-        # Useless deal slot function 
+        # Useless deal slot function
+        ''' 
         if x in range(deal_slot_x-card_width//2, deal_slot_x+card_width//2) and y in range(deal_slot_y-card_height//2, deal_slot_y+card_height//2):
             for card in PlayingCard.full_deck:
                 card.x = deal_slot_x
                 card.y = deal_slot_y
-
+        '''
+        
         # shuffle button
         if x in range(550, 701) and y in range(50, 101):
             PlayingCard.shuffle_cards()
