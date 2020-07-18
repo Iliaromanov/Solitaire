@@ -90,7 +90,7 @@ class MyGame(arcade.Window):
     def on_draw(self):
         arcade.start_render()
         global start_game
-        global card_height, card_height, card_names
+        global card_height, card_height, card_names, shuffled_cards
         global deal_slot_x, deal_slot_y 
 
         # draw hearts playing cards
@@ -138,18 +138,19 @@ class MyGame(arcade.Window):
             i += 1
 
         # redraw card
-        for card in PlayingCard.full_deck:
-            if card.redraw:
+        
+        for card in shuffled_cards:
+             
                 if card.suite == 'hearts' or card.suite == 'diamonds':
                     arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)
-                    
+                        
                 else:
                     arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.BLACK)
 
                 if card.flipped:
                     arcade.draw_text(card_names[card.value-1], card.x-card_width//4, card.y, color=arcade.color.WHITE)
                     arcade.draw_text(card.suite, card.x-card_width//3, card.y-10, arcade.color.WHITE, font_size=8)
-            
+        
                 
         # draw slots for cards
         arcade.draw_rectangle_outline(deal_slot_x, deal_slot_y, card_width, card_height, arcade.color.BLUE)
