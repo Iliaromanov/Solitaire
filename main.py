@@ -165,8 +165,6 @@ class MyGame(arcade.Window):
     def update(self, delta_time):
         """
         All the logic to move, and the game logic goes here.
-        Normally, you'll call update() on the sprite lists that
-        need it.
         """
         global shuffled_cards, deal_slot_x, deal_slot_y, card_width, card_height
         global start_game
