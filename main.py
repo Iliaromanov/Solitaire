@@ -16,6 +16,7 @@ deal_slot_y = 510
 
 card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 shuffled_cards = []
+deal_slot_cards = []
 
 
 class PlayingCard:
@@ -167,8 +168,9 @@ class MyGame(arcade.Window):
         """
         All the logic to move, and the game logic goes here.
         """
-        global shuffled_cards, deal_slot_x, deal_slot_y, card_width, card_height
+        global shuffled_cards, deal_slot_cards
         global start_game
+        global deal_slot_x, deal_slot_y, card_width, card_height
 
         # playing formation
         if start_game:
@@ -191,6 +193,7 @@ class MyGame(arcade.Window):
                         i += 1
 
             for card in shuffled_cards[28:]:        # places the remaining cards into the deal slot
+                deal_slot_cards.append(card)
                 card.flipped = False
                 card.x = deal_slot_x
                 card.y = deal_slot_y
