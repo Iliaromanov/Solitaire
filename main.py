@@ -171,6 +171,7 @@ class MyGame(arcade.Window):
         global shuffled_cards, deal_slot_cards
         global start_game
         global deal_slot_x, deal_slot_y, card_width, card_height
+        global using_card
 
         # playing formation
         if start_game:
@@ -199,6 +200,19 @@ class MyGame(arcade.Window):
                 card.y = deal_slot_y
 
             start_game = False
+
+        # checking if cards stack
+        if using_card != None:
+            for card in PlayingCard.full_deck:
+                '''
+                card_x_bounds = (card.x-card_width//2, card.x+card_width//2)
+                card_y_bounds = (card.y-card_height//2, card.y+card_height//2)
+                using_x_bounds = (using_card.x-card_width//2, using_card.x+card_width//2)
+                using_y_bounds = (using_card.y-card_height//2, using_card.y+card_height//2)
+
+                if card != using_card and card.x in range(using_x_bounds[0], using_x_bounds[1]) and card.y in range(using_y_bounds[0], using_y_bounds[1]):
+                    print('card collided')
+                '''
 
 
     def on_key_press(self, key, key_modifiers):
@@ -264,14 +278,37 @@ class MyGame(arcade.Window):
 
         pick_up_card = False
         using_card = None
+        
 
+def check_card_collision(card: PlayingCard) -> bool:
+    """
+    Checks if using card and another playing card have collided
+
+    Args:
+        card: a playing card object
+    Returns:
+        a boolean value; True if collision; False if no collision
+    """
+    global using_card
+
+    if using_card != None:
+        for card in PlayingCard.full_deck:
+            
+            card_x_bounds = (card.x-card_width//2, card.x+card_width//2)
+            card_y_bounds = (card.y-card_height//2, card.y+card_height//2)
+            using_x_bounds = (using_card.x-card_width//2, using_card.x+card_width//2)
+            using_y_bounds = (using_card.y-card_height//2, using_card.y+card_height//2)
+
+            if card != using_card and card.x in range(using_x_bounds[0], using_x_bounds[1]) and card.y in range(using_y_bounds[0], using_y_bounds[1]):
+                    print('card collided')
 
 def main():
     PlayingCard.make_cards()
     game = MyGame(WIDTH, HEIGHT, "Solataire")
     game.setup()
     arcade.run()
-    
+
+
 
 if __name__ == "__main__":
     main()
