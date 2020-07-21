@@ -204,15 +204,13 @@ class MyGame(arcade.Window):
         # checking if cards stack
         if using_card != None:
             for card in PlayingCard.full_deck:
-                '''
-                card_x_bounds = (card.x-card_width//2, card.x+card_width//2)
-                card_y_bounds = (card.y-card_height//2, card.y+card_height//2)
-                using_x_bounds = (using_card.x-card_width//2, using_card.x+card_width//2)
-                using_y_bounds = (using_card.y-card_height//2, using_card.y+card_height//2)
-
-                if card != using_card and card.x in range(using_x_bounds[0], using_x_bounds[1]) and card.y in range(using_y_bounds[0], using_y_bounds[1]):
-                    print('card collided')
-                '''
+                if check_card_collision:
+                    print("collision occured")
+                    '''
+                    using_card.x = card.x - card_width // 2
+                    using_card.y = card.y - card_height // 2
+                    using_card = None
+                    '''
 
 
     def on_key_press(self, key, key_modifiers):
@@ -294,13 +292,22 @@ def check_card_collision(card: PlayingCard) -> bool:
     if using_card != None:
         for card in PlayingCard.full_deck:
             
-            card_x_bounds = (card.x-card_width//2, card.x+card_width//2)
-            card_y_bounds = (card.y-card_height//2, card.y+card_height//2)
-            using_x_bounds = (using_card.x-card_width//2, using_card.x+card_width//2)
-            using_y_bounds = (using_card.y-card_height//2, using_card.y+card_height//2)
+            card_x = (card.x-card_width//2, card.x+card_width//2)
+            card_y = (card.y-card_height//2, card.y+card_height//2)
+            using_x = (using_card.x-card_width//2, using_card.x+card_width//2)
+            using_y = (using_card.y-card_height//2, using_card.y+card_height//2)
 
-            if card != using_card and card.x in range(using_x_bounds[0], using_x_bounds[1]) and card.y in range(using_y_bounds[0], using_y_bounds[1]):
-                    print('card collided')
+            collision_a = False
+            collision_b = False
+
+            if using_card.x in range(card_x[0], card_x[1]) and using_card.y in range(card_y[0], card_y[1]):
+                collision_a is True
+            elif card.x in range(using_x[0], using_x[1]) and card.y in range(using_y[0], using_y[1]):
+                collision_b is True
+
+            if collision_a or collision_b:
+                return True
+                    
 
 def main():
     PlayingCard.make_cards()
