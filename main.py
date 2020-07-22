@@ -270,16 +270,16 @@ class MyGame(arcade.Window):
         """
         global pick_up_card, using_card
 
-        pick_up_card = False
+        
 
-        if using_card != None:
+        if pick_up_card and using_card != None:
             for card in PlayingCard.full_deck:
                 if check_card_collision(card):
-                    using_card.x = card.x - card_width // 2
+                    using_card.x = card.x
                     using_card.y = card.y - card_height // 2
                 else:
                     print('no')
-        
+            pick_up_card = False
         
 
 def check_card_collision(card: PlayingCard) -> bool:
@@ -301,10 +301,11 @@ def check_card_collision(card: PlayingCard) -> bool:
     collision_a = False
     collision_b = False
 
-    if using_card.x in range(card_x[0], card_x[1]) and using_card.y in range(card_y[0], card_y[1]):
-        collision_a = True
-    elif card.x in range(using_x[0], using_x[1]) and card.y in range(using_y[0], using_y[1]):
-        collision_b = True
+    if using_card != card:
+        if using_card.x in range(card_x[0], card_x[1]) and using_card.y in range(card_y[0], card_y[1]):
+            collision_a = True
+        elif card.x in range(using_x[0], using_x[1]) and card.y in range(using_y[0], using_y[1]):
+            collision_b = True
 
     if collision_a or collision_b:
         return True
