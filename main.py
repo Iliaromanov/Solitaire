@@ -204,13 +204,8 @@ class MyGame(arcade.Window):
         # checking if cards stack
         if using_card != None:
             for card in PlayingCard.full_deck:
-                if check_card_collision:
+                if check_card_collision(card):
                     print("collision occured")
-                    '''
-                    using_card.x = card.x - card_width // 2
-                    using_card.y = card.y - card_height // 2
-                    using_card = None
-                    '''
 
 
     def on_key_press(self, key, key_modifiers):
@@ -243,8 +238,8 @@ class MyGame(arcade.Window):
         Called when the user presses a mouse button.
         """
         global pick_up_card, using_card
-        global deal_slot_x, deal_slot_y
-        global card_height, card_height
+        global deal_slot_x, deal_slot_y, deal_slot_cards
+        global card_height, card_width
         global start_game
 
         # Picking up and clicking on individual cards
@@ -252,15 +247,16 @@ class MyGame(arcade.Window):
             if x in range(card.x-card_width//2, card.x+card_width//2) and y in range(card.y-card_height//2, card.y+card_height//2):
                 pick_up_card = True
                 using_card = card
-                # card.flipped = not card.flipped
+                
         
-        # Useless deal slot function
-        ''' 
+        # Useless deal slot function         
         if x in range(deal_slot_x-card_width//2, deal_slot_x+card_width//2) and y in range(deal_slot_y-card_height//2, deal_slot_y+card_height//2):
-            for card in PlayingCard.full_deck:
-                card.x = deal_slot_x
-                card.y = deal_slot_y
-        '''
+            card = deal_slot_cards[-1]            
+            card.x = deal_slot_x
+            card.y = deal_slot_y - card_height
+            deal_slot_cards.remove(card)
+
+
 
         # shuffle button
         if x in range(550, 701) and y in range(50, 101):
@@ -275,7 +271,15 @@ class MyGame(arcade.Window):
         global pick_up_card, using_card
 
         pick_up_card = False
-        using_card = None
+
+        if using_card != None:
+            for card in PlayingCard.full_deck:
+                if check_card_collision(card):
+                    using_card.x = card.x - card_width // 2
+                    using_card.y = card.y - card_height // 2
+                else:
+                    print('no')
+        
         
 
 def check_card_collision(card: PlayingCard) -> bool:
@@ -288,25 +292,22 @@ def check_card_collision(card: PlayingCard) -> bool:
         a boolean value; True if collision; False if no collision
     """
     global using_card
-
-    if using_card != None:
-        for card in PlayingCard.full_deck:
             
-            card_x = (card.x-card_width//2, card.x+card_width//2)
-            card_y = (card.y-card_height//2, card.y+card_height//2)
-            using_x = (using_card.x-card_width//2, using_card.x+card_width//2)
-            using_y = (using_card.y-card_height//2, using_card.y+card_height//2)
+    card_x = (card.x-card_width//2, card.x+card_width//2)
+    card_y = (card.y-card_height//2, card.y+card_height//2)
+    using_x = (using_card.x-card_width//2, using_card.x+card_width//2)
+    using_y = (using_card.y-card_height//2, using_card.y+card_height//2)
 
-            collision_a = False
-            collision_b = False
+    collision_a = False
+    collision_b = False
 
-            if using_card.x in range(card_x[0], card_x[1]) and using_card.y in range(card_y[0], card_y[1]):
-                collision_a is True
-            elif card.x in range(using_x[0], using_x[1]) and card.y in range(using_y[0], using_y[1]):
-                collision_b is True
+    if using_card.x in range(card_x[0], card_x[1]) and using_card.y in range(card_y[0], card_y[1]):
+        collision_a = True
+    elif card.x in range(using_x[0], using_x[1]) and card.y in range(using_y[0], using_y[1]):
+        collision_b = True
 
-            if collision_a or collision_b:
-                return True
+    if collision_a or collision_b:
+        return True
                     
 
 def main():
