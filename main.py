@@ -295,8 +295,8 @@ def check_card_collision(card: PlayingCard) -> bool:
             
     card_x = (card.x-card_width//2, card.x+card_width//2)
     card_y = (card.y-card_height//2, card.y+card_height//2)
-    using_x = (using_card.x-card_width//2, using_card.x+card_width//2)
-    using_y = (using_card.y-card_height//2, using_card.y+card_height//2)
+    using_x = (using_card.x-card_width, using_card.x+card_width)
+    using_y = (using_card.y-card_height, using_card.y+card_height)
 
     collision_a = False
     collision_b = False
