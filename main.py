@@ -34,7 +34,7 @@ class PlayingCard:
         self.x = x
         self.y = y
         self.flipped = True
-        self.redraw = False
+        self.bottom_cards = []
         PlayingCard.full_deck.append(self)
 
     def __str__(self) -> str:
@@ -195,17 +195,16 @@ class MyGame(arcade.Window):
 
             for card in shuffled_cards[28:]:        # places the remaining cards into the deal slot
                 deal_slot_cards.append(card)
-                card.flipped = False
+                card.flipped = True
                 card.x = deal_slot_x
                 card.y = deal_slot_y
 
             start_game = False
 
-        # checking if cards stack
-        if using_card != None:
-            for card in PlayingCard.full_deck:
-                if check_card_collision(card):
-                    print("collision occured")
+        for top_card in PlayingCard.full_deck:
+            for card in top_card.bottom_cards:
+                card.x = top_card.x
+                card.y = top_card.y - card_height // 2
 
 
     def on_key_press(self, key, key_modifiers):
@@ -270,15 +269,15 @@ class MyGame(arcade.Window):
         """
         global pick_up_card, using_card
 
-        
-
         if pick_up_card and using_card != None:
             for card in PlayingCard.full_deck:
                 if check_card_collision(card):
                     using_card.x = card.x
                     using_card.y = card.y - card_height // 2
+                    card.bottom_cards.append(using_card)
+                    print("collision occured")
                 else:
-                    print('no')
+                    print("no")
             pick_up_card = False
         
 
@@ -313,7 +312,7 @@ def check_card_collision(card: PlayingCard) -> bool:
 
 def main():
     PlayingCard.make_cards()
-    game = MyGame(WIDTH, HEIGHT, "Solataire")
+    game = MyGame(WIDTH, HEIGHT, "Solitaire")
     game.setup()
     arcade.run()
 
