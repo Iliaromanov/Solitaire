@@ -308,7 +308,20 @@ def check_card_collision(card: PlayingCard) -> bool:
 
     if collision_a or collision_b:
         return True
-                    
+
+    return False
+
+
+def check_cards_stack(card: PlayingCard) -> bool:
+    """Checks if cards are able to stack based on their values
+    """
+    global using_card
+
+    if using_card != None:
+        if using_card.value + 1 == card.value:
+            return True
+
+    return False
 
 def main():
     PlayingCard.make_cards()
