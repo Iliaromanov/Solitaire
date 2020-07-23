@@ -190,7 +190,9 @@ class MyGame(arcade.Window):
                             card.flipped = True
                         else:
                             card.flipped = False
-                                                
+
+                        card.bottom_cards = []
+
                         i += 1
 
             for card in shuffled_cards[28:]:        # places the remaining cards into the deal slot
@@ -198,7 +200,7 @@ class MyGame(arcade.Window):
                 card.flipped = True
                 card.x = deal_slot_x
                 card.y = deal_slot_y
-
+                card.bottom_cards = []
             start_game = False
 
         for top_card in PlayingCard.full_deck:
@@ -246,22 +248,23 @@ class MyGame(arcade.Window):
             if x in range(card.x-card_width//2, card.x+card_width//2) and y in range(card.y-card_height//2, card.y+card_height//2):
                 pick_up_card = True
                 using_card = card
-                
-        
-        # Useless deal slot function         
+                '''
+                for bottom_card in card.bottom_cards:
+                    if x in range(bottom_card.x-card_width//2, bottom_card.x+card_width//2) and y in range(bottom_card.y-card_height//2, bottom_card.y+card_height//2):
+                        card.bottom_cards.remove(bottom_card)
+                '''
+
+        # deal slot mechanics         
         if x in range(deal_slot_x-card_width//2, deal_slot_x+card_width//2) and y in range(deal_slot_y-card_height//2, deal_slot_y+card_height//2):
             card = deal_slot_cards[-1]            
             card.x = deal_slot_x
             card.y = deal_slot_y - card_height
             deal_slot_cards.remove(card)
 
-
-
         # shuffle button
         if x in range(550, 701) and y in range(50, 101):
             PlayingCard.shuffle_cards()
             start_game = True
-
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """
@@ -318,8 +321,13 @@ def check_cards_stack(card: PlayingCard) -> bool:
     global using_card
 
     if using_card != None:
+        red = 'hearts,diamonds'
+        black = 'spades,clubs'
         if using_card.value + 1 == card.value:
-            return True
+            if using_card.suite in red and card.suite in black:
+                return True
+            elif using_card.suite in black and card.suite in red:
+                return True
 
     return False
 
