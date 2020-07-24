@@ -253,11 +253,9 @@ class MyGame(arcade.Window):
                 using_card = card
                 for c in card.bottom_cards:
                     print(c)
-                '''
-                for bottom_card in card.bottom_cards:
-                    if x in range(bottom_card.x-card_width//2, bottom_card.x+card_width//2) and y in range(bottom_card.y-card_height//2, bottom_card.y+card_height//2):
-                        card.bottom_cards.remove(bottom_card)
-                '''
+                for top_card in PlayingCard.full_deck:
+                    if card in top_card.bottom_cards:
+                        top_card.bottom_cards.remove(card)
 
         # deal slot mechanics         
         if x in range(deal_slot_x-card_width//2, deal_slot_x+card_width//2) and y in range(deal_slot_y-card_height//2, deal_slot_y+card_height//2):
