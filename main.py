@@ -18,6 +18,11 @@ card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'n
 shuffled_cards = []
 deal_slot_cards = []
 
+slot1 = []
+slot2 = []
+slot3 = []
+slot4 = []
+
 
 class PlayingCard:
     """Creates and organizes the playing cards
