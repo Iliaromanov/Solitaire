@@ -203,12 +203,14 @@ class MyGame(arcade.Window):
                 card.bottom_cards = []
             start_game = False
 
+        # card stacking
         for top_card in PlayingCard.full_deck:
-            for card in top_card.bottom_cards:
+            if top_card.bottom_cards != []:
+                card = top_card.bottom_cards[0]
                 card.x = top_card.x
                 card.y = top_card.y - card_height // 2
 
-
+    '''
     def on_key_press(self, key, key_modifiers):
         """
         Called whenever a key on the keyboard is pressed.
@@ -222,6 +224,7 @@ class MyGame(arcade.Window):
         Called whenever the user lets off a previously pressed key.
         """
         pass
+    '''
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         """
@@ -248,6 +251,8 @@ class MyGame(arcade.Window):
             if x in range(card.x-card_width//2, card.x+card_width//2) and y in range(card.y-card_height//2, card.y+card_height//2):
                 pick_up_card = True
                 using_card = card
+                for c in card.bottom_cards:
+                    print(c)
                 '''
                 for bottom_card in card.bottom_cards:
                     if x in range(bottom_card.x-card_width//2, bottom_card.x+card_width//2) and y in range(bottom_card.y-card_height//2, bottom_card.y+card_height//2):
@@ -274,13 +279,12 @@ class MyGame(arcade.Window):
 
         if pick_up_card and using_card != None:
             for card in PlayingCard.full_deck:
-                if check_card_collision(card):
-                    using_card.x = card.x
-                    using_card.y = card.y - card_height // 2
-                    card.bottom_cards.append(using_card)
-                    print("collision occured")
-                else:
-                    print("no")
+                if check_card_collision(card) and card.bottom_cards == []:                    
+                        card.bottom_cards.append(using_card)
+                        for top_card in PlayingCard.full_deck:
+                            if card in top_card.bottom_cards:
+                                top_card.bottom_cards.append(using_card)
+
             pick_up_card = False
         
 
@@ -303,7 +307,7 @@ def check_card_collision(card: PlayingCard) -> bool:
     collision_a = False
     collision_b = False
 
-    if using_card != card:
+    if using_card != card and card not in using_card.bottom_cards:
         if using_card.x in range(card_x[0], card_x[1]) and using_card.y in range(card_y[0], card_y[1]):
             collision_a = True
         elif card.x in range(using_x[0], using_x[1]) and card.y in range(using_y[0], using_y[1]):
