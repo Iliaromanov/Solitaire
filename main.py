@@ -287,8 +287,6 @@ class MyGame(arcade.Window):
 
 
         if pick_up_card and using_card != None:
-            
-            """Slot stacking should be made prioritized over card stacking"""
             # slots mechanics
             for i in range(4):
                 if x in range(other_slots_x[i], other_slots_x[i]+card_width) and y in range(other_slots_y, other_slots_y+card_height):
