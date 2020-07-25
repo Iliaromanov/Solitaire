@@ -265,6 +265,7 @@ class MyGame(arcade.Window):
             if x in range(card.x-w, card.x+w) and y in range(card.y-h, card.y+h):
                 pick_up_card = True
                 using_card = card
+                card.flipped = True
                 for c in card.bottom_cards:
                     print(c)
                 for top_card in PlayingCard.full_deck:
@@ -285,7 +286,6 @@ class MyGame(arcade.Window):
         global other_slots_x, other_slots_y
         global card_width, card_height
 
-
         if pick_up_card and using_card != None:
             # slots mechanics
             for i in range(4):
@@ -296,7 +296,7 @@ class MyGame(arcade.Window):
 
             # card stacking mechanics
             for card in PlayingCard.full_deck:
-                if check_card_collision(card) and card.bottom_cards == []:                    
+                if card_collision(card) and card.bottom_cards == [] and cards_stack(card):                    
                         card.bottom_cards.append(using_card)
                         for top_card in PlayingCard.full_deck:
                             if card in top_card.bottom_cards:
@@ -304,14 +304,9 @@ class MyGame(arcade.Window):
             
             pick_up_card = False
 
-def check_card_collision(card: PlayingCard) -> bool:
+def card_collision(card: PlayingCard) -> bool:
     """
     Checks if using card and another playing card have collided
-
-    Args:
-        card: a playing card object
-    Returns:
-        a boolean value; True if collision; False if no collision
     """
     global using_card
     global card_width, card_height
@@ -348,7 +343,7 @@ def check_card_collision(card: PlayingCard) -> bool:
     return False
 
 
-def check_cards_stack(card: PlayingCard) -> bool:
+def cards_stack(card: PlayingCard) -> bool:
     """Checks if cards are able to stack based on their values
     """
     global using_card
@@ -364,6 +359,10 @@ def check_cards_stack(card: PlayingCard) -> bool:
 
     return False
 
+def slot_card(card: PlayingCard) -> bool:
+    """Checks if card can be placed in the slot
+    """
+    
 def main():
     PlayingCard.make_cards()
     game = MyGame(WIDTH, HEIGHT, "Solitaire")
