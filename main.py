@@ -284,11 +284,17 @@ class MyGame(arcade.Window):
         """
         global pick_up_card, using_card
         global other_slots_x, other_slots_y
+        global card_width, card_height
 
-        w = card_width // 2
-        h = card_height // 2
 
         if pick_up_card and using_card != None:
+            
+            # slots mechanics
+            for i in range(4):
+                if x in range(other_slots_x[i], other_slots_x[i]+card_width) and y in range(other_slots_y, other_slots_y+card_height):
+                    all_slots[i].append(using_card)
+                    using_card.x = other_slots_x[i] + card_width // 2
+                    using_card.y = other_slots_y + card_height // 2
 
             # card stacking mechanics
             for card in PlayingCard.full_deck:
@@ -297,14 +303,7 @@ class MyGame(arcade.Window):
                         for top_card in PlayingCard.full_deck:
                             if card in top_card.bottom_cards:
                                 top_card.bottom_cards.append(using_card)
-            '''
-            # other slots mechanics
-            for i in range(4):
-                if x in range(other_slots_x[i]-w, other_slots_x+w) and y in range(other_slots_y-h, other_slots_y+h):
-                    all_slots[i].append(using_card)
-                    using_card.x = other_slots_x[i]
-                    using_card.y = other_slots_y
-            '''
+            
             pick_up_card = False
 
 def check_card_collision(card: PlayingCard) -> bool:
