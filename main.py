@@ -311,17 +311,17 @@ def card_collision(card: PlayingCard) -> bool:
     global using_card
     global card_width, card_height
     global deal_slot_x, deal_slot_y, other_slots_x, other_slots_y
-            
-    card_x = (card.x-card_width//2, card.x+card_width//2)
-    card_y = (card.y-card_height//2, card.y+card_height//2)
-    using_x = (using_card.x-card_width, using_card.x+card_width)
-    using_y = (using_card.y-card_height, using_card.y+card_height)
-
-    collision_a = False
-    collision_b = False
 
     w = card_width
     h = card_height
+     
+    card_x = (card.x - w // 2, card.x + w // 2)
+    card_y = (card.y - h // 2, card.y + h // 2)
+    using_x = (using_card.x - w, using_card.x + w)
+    using_y = (using_card.y - h, using_card.y + h)
+
+    collision_a = False
+    collision_b = False
 
     if using_card != card and card not in using_card.bottom_cards:
         # cards in placements slots
@@ -362,7 +362,9 @@ def cards_stack(card: PlayingCard) -> bool:
 def slot_card(card: PlayingCard) -> bool:
     """Checks if card can be placed in the slot
     """
-    
+    global all_slots
+
+
 def main():
     PlayingCard.make_cards()
     game = MyGame(WIDTH, HEIGHT, "Solitaire")
