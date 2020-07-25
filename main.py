@@ -14,6 +14,10 @@ card_height = 70
 deal_slot_x = 57
 deal_slot_y = 510
 
+# x coordinates:  x1,  x2,  x3,  x4  
+other_slots_x = [550, 600, 650, 700]
+other_slots_y = 475
+
 card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 shuffled_cards = []
 deal_slot_cards = []
@@ -97,7 +101,7 @@ class MyGame(arcade.Window):
         arcade.start_render()
         global start_game
         global card_height, card_height, card_names, shuffled_cards
-        global deal_slot_x, deal_slot_y 
+        global deal_slot_x, deal_slot_y, other_slots_x, other_slots_y
 
         # draw hearts playing cards
         for card in PlayingCard.hearts.values():
@@ -146,23 +150,19 @@ class MyGame(arcade.Window):
         # redraw card
         
         for card in shuffled_cards:
-             
                 if card.suite == 'hearts' or card.suite == 'diamonds':
-                    arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)
-                        
+                    arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)                       
                 else:
                     arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.BLACK)
-
                 if card.flipped:
                     arcade.draw_text(card_names[card.value-1], card.x-card_width//4, card.y, color=arcade.color.WHITE)
                     arcade.draw_text(card.suite, card.x-card_width//3, card.y-10, arcade.color.WHITE, font_size=8)
-        
-                
+                   
         # draw slots for cards
         arcade.draw_rectangle_outline(deal_slot_x, deal_slot_y, card_width, card_height, arcade.color.BLUE)
 
-        for num in range(4):
-            arcade.draw_xywh_rectangle_outline(550 + num*50, 475, card_width, card_height, arcade.color.BLUE)
+        for i in range(4):
+            arcade.draw_xywh_rectangle_outline(other_slots_x[i], other_slots_y, card_width, card_height, arcade.color.BLUE)
 
         # draw shuffle button used to shuffle and put the cards into playing formation
         arcade.draw_xywh_rectangle_filled(550, 50, 150, 50, arcade.color.GUPPIE_GREEN)
