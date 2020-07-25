@@ -26,7 +26,7 @@ slot1 = []
 slot2 = []
 slot3 = []
 slot4 = []
-
+all_slots = [slot1, slot2, slot3, slot4]
 
 class PlayingCard:
     """Creates and organizes the playing cards
@@ -277,22 +277,35 @@ class MyGame(arcade.Window):
             PlayingCard.shuffle_cards()
             start_game = True
 
+
     def on_mouse_release(self, x, y, button, key_modifiers):
         """
         Called when a user releases a mouse button.
         """
         global pick_up_card, using_card
+        global other_slots_x, other_slots_y
+
+        w = card_width // 2
+        h = card_height // 2
 
         if pick_up_card and using_card != None:
+
+            # card stacking mechanics
             for card in PlayingCard.full_deck:
                 if check_card_collision(card) and card.bottom_cards == []:                    
                         card.bottom_cards.append(using_card)
                         for top_card in PlayingCard.full_deck:
                             if card in top_card.bottom_cards:
                                 top_card.bottom_cards.append(using_card)
-
+            '''
+            # other slots mechanics
+            for i in range(4):
+                if x in range(other_slots_x[i]-w, other_slots_x+w) and y in range(other_slots_y-h, other_slots_y+h):
+                    all_slots[i].append(using_card)
+                    using_card.x = other_slots_x[i]
+                    using_card.y = other_slots_y
+            '''
             pick_up_card = False
-        
 
 def check_card_collision(card: PlayingCard) -> bool:
     """
