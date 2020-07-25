@@ -1,5 +1,6 @@
 import arcade
 import random
+from typing import List
 
 WIDTH = 800
 HEIGHT = 600
@@ -177,10 +178,11 @@ class MyGame(arcade.Window):
         global deal_slot_x, deal_slot_y, card_width, card_height
         global using_card
 
-        # playing formation
+        # after shuffle button is pressed
         if start_game:
+            # places the first 28 cards in playing position
             i = 0
-            while i < 28:                            # places the first 28 cards in playing position
+            while i < 28:
                 for row_num in range(7):
                     for row_len in range(7 - row_num):
 
@@ -199,12 +201,17 @@ class MyGame(arcade.Window):
 
                         i += 1
 
-            for card in shuffled_cards[28:]:        # places the remaining cards into the deal slot
+            # places the remaining cards into the deal slot
+            for card in shuffled_cards[28:]:
                 deal_slot_cards.append(card)
                 card.flipped = True
                 card.x = deal_slot_x
                 card.y = deal_slot_y
                 card.bottom_cards = []
+
+            # empties slot lists
+
+            
             start_game = False
 
         # card stacking
@@ -246,7 +253,7 @@ class MyGame(arcade.Window):
         Called when the user presses a mouse button.
         """
         global pick_up_card, using_card
-        global deal_slot_x, deal_slot_y, deal_slot_cards, other_slots_x, other_slots_y
+        global deal_slot_x, deal_slot_y, deal_slot_cards, other_slots_x, other_slots_y, all_slots
         global card_height, card_width
         global start_game
 
@@ -266,11 +273,13 @@ class MyGame(arcade.Window):
                 pick_up_card = True
                 using_card = card
                 card.flipped = True
-                for c in card.bottom_cards:
-                    print(c)
                 for top_card in PlayingCard.full_deck:
                     if card in top_card.bottom_cards:
                         top_card.bottom_cards.remove(card)
+                # removing cards from slot lists
+                for i in range(4):
+                    if x in range(other_slots_x[i], other_slots_x[i]+w*2) and y in range(other_slots_y, other_slots_y+h*2) and all_slots[i] != []:
+                        all_slots[i].remove(card)
 
         # shuffle button
         if x in range(550, 701) and y in range(50, 101):
@@ -286,10 +295,13 @@ class MyGame(arcade.Window):
         global other_slots_x, other_slots_y
         global card_width, card_height
 
+        w = card_width
+        h = card_height
+
         if pick_up_card and using_card != None:
             # slots mechanics
             for i in range(4):
-                if x in range(other_slots_x[i], other_slots_x[i]+card_width) and y in range(other_slots_y, other_slots_y+card_height):
+                if x in range(other_slots_x[i], other_slots_x[i]+w) and y in range(other_slots_y, other_slots_y+h) and slot_card(using_card, all_slots[i]):
                     all_slots[i].append(using_card)
                     using_card.x = other_slots_x[i] + card_width // 2
                     using_card.y = other_slots_y + card_height // 2
@@ -359,11 +371,16 @@ def cards_stack(card: PlayingCard) -> bool:
 
     return False
 
-def slot_card(card: PlayingCard) -> bool:
+
+def slot_card(card: PlayingCard, slot: List[PlayingCard]) -> bool:
     """Checks if card can be placed in the slot
     """
-    global all_slots
-
+    if card.value == 1 and slot == []:
+        return True
+    elif slot != [] and card.value - 1 == slot[-1].value and card.suite == slot[-1].suite:
+        return True
+    
+    return False
 
 def main():
     PlayingCard.make_cards()
