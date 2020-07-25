@@ -160,7 +160,6 @@ class MyGame(arcade.Window):
                    
         # draw slots for cards
         arcade.draw_rectangle_outline(deal_slot_x, deal_slot_y, card_width, card_height, arcade.color.BLUE)
-
         for i in range(4):
             arcade.draw_xywh_rectangle_outline(other_slots_x[i], other_slots_y, card_width, card_height, arcade.color.BLUE)
 
@@ -254,6 +253,13 @@ class MyGame(arcade.Window):
         w = card_width // 2
         h = card_height // 2
 
+        # deal slot mechanics         
+        if x in range(deal_slot_x-w, deal_slot_x+w) and y in range(deal_slot_y-h, deal_slot_y+h):
+            card = deal_slot_cards[-1]            
+            card.x = deal_slot_x
+            card.y = deal_slot_y - card_height
+            deal_slot_cards.remove(card)
+
         # Picking up and clicking on individual cards
         for card in PlayingCard.full_deck:
             if x in range(card.x-w, card.x+w) and y in range(card.y-h, card.y+h):
@@ -264,13 +270,6 @@ class MyGame(arcade.Window):
                 for top_card in PlayingCard.full_deck:
                     if card in top_card.bottom_cards:
                         top_card.bottom_cards.remove(card)
-
-        # deal slot mechanics         
-        if x in range(deal_slot_x-w, deal_slot_x+w) and y in range(deal_slot_y-h, deal_slot_y+h):
-            card = deal_slot_cards[-1]            
-            card.x = deal_slot_x
-            card.y = deal_slot_y - card_height
-            deal_slot_cards.remove(card)
 
         # shuffle button
         if x in range(550, 701) and y in range(50, 101):
@@ -289,6 +288,7 @@ class MyGame(arcade.Window):
 
         if pick_up_card and using_card != None:
             
+            """Slot stacking should be made prioritized over card stacking"""
             # slots mechanics
             for i in range(4):
                 if x in range(other_slots_x[i], other_slots_x[i]+card_width) and y in range(other_slots_y, other_slots_y+card_height):
@@ -316,6 +316,8 @@ def check_card_collision(card: PlayingCard) -> bool:
         a boolean value; True if collision; False if no collision
     """
     global using_card
+    global card_width, card_height
+    global deal_slot_x, deal_slot_y, other_slots_x, other_slots_y
             
     card_x = (card.x-card_width//2, card.x+card_width//2)
     card_y = (card.y-card_height//2, card.y+card_height//2)
@@ -325,8 +327,19 @@ def check_card_collision(card: PlayingCard) -> bool:
     collision_a = False
     collision_b = False
 
+    w = card_width
+    h = card_height
+
     if using_card != card and card not in using_card.bottom_cards:
-        if using_card.x in range(card_x[0], card_x[1]) and using_card.y in range(card_y[0], card_y[1]):
+        # cards in placements slots
+        for i in range(4):
+            if using_card.x in range(other_slots_x[i], other_slots_x[i]+w) and using_card.y in range(other_slots_y, other_slots_y+h):
+                return False
+        # cards in deal slot
+        if using_card.x in range(deal_slot_x-w//2, deal_slot_x+w//2) and using_card.y in range(deal_slot_y-h//2, deal_slot_y+h//2):
+            return False
+        # normal card collision
+        elif using_card.x in range(card_x[0], card_x[1]) and using_card.y in range(card_y[0], card_y[1]):
             collision_a = True
         elif card.x in range(using_x[0], using_x[1]) and card.y in range(using_y[0], using_y[1]):
             collision_b = True
