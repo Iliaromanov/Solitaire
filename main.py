@@ -173,7 +173,7 @@ class MyGame(arcade.Window):
         """
         All the logic to move, and the game logic goes here.
         """
-        global shuffled_cards, deal_slot_cards
+        global shuffled_cards, deal_slot_cards, all_slots
         global start_game
         global deal_slot_x, deal_slot_y, card_width, card_height
         global using_card
@@ -210,7 +210,8 @@ class MyGame(arcade.Window):
                 card.bottom_cards = []
 
             # empties slot lists
-
+            for i in range(4):
+                all_slots[i] = []
             
             start_game = False
 
