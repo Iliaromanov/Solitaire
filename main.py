@@ -247,13 +247,16 @@ class MyGame(arcade.Window):
         Called when the user presses a mouse button.
         """
         global pick_up_card, using_card
-        global deal_slot_x, deal_slot_y, deal_slot_cards
+        global deal_slot_x, deal_slot_y, deal_slot_cards, other_slots_x, other_slots_y
         global card_height, card_width
         global start_game
 
+        w = card_width // 2
+        h = card_height // 2
+
         # Picking up and clicking on individual cards
         for card in PlayingCard.full_deck:
-            if x in range(card.x-card_width//2, card.x+card_width//2) and y in range(card.y-card_height//2, card.y+card_height//2):
+            if x in range(card.x-w, card.x+w) and y in range(card.y-h, card.y+h):
                 pick_up_card = True
                 using_card = card
                 for c in card.bottom_cards:
@@ -263,7 +266,7 @@ class MyGame(arcade.Window):
                         top_card.bottom_cards.remove(card)
 
         # deal slot mechanics         
-        if x in range(deal_slot_x-card_width//2, deal_slot_x+card_width//2) and y in range(deal_slot_y-card_height//2, deal_slot_y+card_height//2):
+        if x in range(deal_slot_x-w, deal_slot_x+w) and y in range(deal_slot_y-h, deal_slot_y+h):
             card = deal_slot_cards[-1]            
             card.x = deal_slot_x
             card.y = deal_slot_y - card_height
