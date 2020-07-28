@@ -8,6 +8,7 @@ HEIGHT = 600
 start_game = False
 pick_up_card = False
 using_card = None
+card_placed = False
 
 card_width = 40
 card_height = 70
@@ -22,7 +23,8 @@ other_slots_y = 475
 card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 shuffled_cards = []
 deal_slot_cards = []
-column = [[] for _ in range(8)]
+
+#     slot:  1   2   3   4
 all_slots = [[], [], [], []]
 
 class PlayingCard:
@@ -39,6 +41,8 @@ class PlayingCard:
         self.suite = suite
         self.x = x
         self.y = y
+        self.old_x = x
+        self.old_y = y
         self.flipped = True
         self.bottom_cards = []
         PlayingCard.full_deck.append(self)
@@ -144,7 +148,8 @@ class MyGame(arcade.Window):
                 arcade.draw_text("clubs", list(PlayingCard.clubs.values())[i].x-card_width//3, list(PlayingCard.clubs.values())[i].y-10, arcade.color.WHITE, font_size=8)
             i += 1
 
-        # redraw card       
+        # redraw card
+        
         for card in shuffled_cards:
                 if card.suite == 'hearts' or card.suite == 'diamonds':
                     arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)                       
@@ -172,7 +177,6 @@ class MyGame(arcade.Window):
         global start_game
         global deal_slot_x, deal_slot_y, card_width, card_height
         global using_card
-        global column
 
         # after shuffle button is pressed
         if start_game:
@@ -181,8 +185,10 @@ class MyGame(arcade.Window):
             while i < 28:
                 for row_num in range(7):
                     for row_len in range(7 - row_num):
+
                         card = shuffled_cards[i] 
                         start_x = 171 + row_num*57    
+
                         card.x = start_x + 57 * (row_len)
                         card.y = 400 - card_height // 2 * (row_num) 
                         
@@ -192,7 +198,7 @@ class MyGame(arcade.Window):
                             card.flipped = False
 
                         card.bottom_cards = []
-                        column[row_num+row_len].append(card)
+
                         i += 1
 
             # places the remaining cards into the deal slot
@@ -265,6 +271,8 @@ class MyGame(arcade.Window):
         # Picking up and clicking on individual cards
         for card in PlayingCard.full_deck:
             if x in range(card.x-w, card.x+w) and y in range(card.y-h, card.y+h):
+                card.old_x = card.x
+                card.old_y = card.y
                 pick_up_card = True
                 using_card = card
                 card.flipped = True
@@ -275,6 +283,7 @@ class MyGame(arcade.Window):
                 # removing cards from slot lists
                 for i in range(4):
                     if using_card in all_slots[i]:
+                        print('card removed')
                         print(len(all_slots[i]))
                         all_slots[i].remove(using_card)
 
@@ -291,14 +300,19 @@ class MyGame(arcade.Window):
         global pick_up_card, using_card
         global other_slots_x, other_slots_y
         global card_width, card_height
+        global card_placed
 
         w = card_width
         h = card_height
 
         if pick_up_card and using_card != None:
+            if not card_placed:
+                using_card.x = using_card.old_x
+                using_card.y = using_card.old_y
             # slots mechanics
             for i in range(4):
                 if x in range(other_slots_x[i], other_slots_x[i]+w) and y in range(other_slots_y, other_slots_y+h) and slot_card(using_card, all_slots[i]):
+                    print('card placed')
                     all_slots[i].append(using_card)
                     using_card.x = other_slots_x[i] + card_width // 2
                     using_card.y = other_slots_y + card_height // 2
