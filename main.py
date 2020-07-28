@@ -23,11 +23,8 @@ card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'n
 shuffled_cards = []
 deal_slot_cards = []
 
-slot1 = []
-slot2 = []
-slot3 = []
-slot4 = []
-all_slots = [slot1, slot2, slot3, slot4]
+#     slot:  1   2   3   4
+all_slots = [[], [], [], []]
 
 class PlayingCard:
     """Creates and organizes the playing cards
@@ -274,13 +271,16 @@ class MyGame(arcade.Window):
                 pick_up_card = True
                 using_card = card
                 card.flipped = True
+                # card stacking mechanic
                 for top_card in PlayingCard.full_deck:
                     if card in top_card.bottom_cards:
                         top_card.bottom_cards.remove(card)
                 # removing cards from slot lists
                 for i in range(4):
-                    if x in range(other_slots_x[i], other_slots_x[i]+w*2) and y in range(other_slots_y, other_slots_y+h*2) and all_slots[i] != []:
-                        all_slots[i].remove(card)
+                    if using_card in all_slots[i]:
+                        print('card removed')
+                        print(len(all_slots[i]))
+                        all_slots[i].remove(using_card)
 
         # shuffle button
         if x in range(550, 701) and y in range(50, 101):
@@ -303,6 +303,7 @@ class MyGame(arcade.Window):
             # slots mechanics
             for i in range(4):
                 if x in range(other_slots_x[i], other_slots_x[i]+w) and y in range(other_slots_y, other_slots_y+h) and slot_card(using_card, all_slots[i]):
+                    print('card placed')
                     all_slots[i].append(using_card)
                     using_card.x = other_slots_x[i] + card_width // 2
                     using_card.y = other_slots_y + card_height // 2
