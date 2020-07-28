@@ -22,8 +22,7 @@ other_slots_y = 475
 card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 shuffled_cards = []
 deal_slot_cards = []
-
-#     slot:  1   2   3   4
+column = [[] for _ in range(8)]
 all_slots = [[], [], [], []]
 
 class PlayingCard:
@@ -145,8 +144,7 @@ class MyGame(arcade.Window):
                 arcade.draw_text("clubs", list(PlayingCard.clubs.values())[i].x-card_width//3, list(PlayingCard.clubs.values())[i].y-10, arcade.color.WHITE, font_size=8)
             i += 1
 
-        # redraw card
-        
+        # redraw card       
         for card in shuffled_cards:
                 if card.suite == 'hearts' or card.suite == 'diamonds':
                     arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)                       
@@ -174,6 +172,7 @@ class MyGame(arcade.Window):
         global start_game
         global deal_slot_x, deal_slot_y, card_width, card_height
         global using_card
+        global column
 
         # after shuffle button is pressed
         if start_game:
@@ -182,10 +181,8 @@ class MyGame(arcade.Window):
             while i < 28:
                 for row_num in range(7):
                     for row_len in range(7 - row_num):
-
                         card = shuffled_cards[i] 
                         start_x = 171 + row_num*57    
-
                         card.x = start_x + 57 * (row_len)
                         card.y = 400 - card_height // 2 * (row_num) 
                         
@@ -195,7 +192,7 @@ class MyGame(arcade.Window):
                             card.flipped = False
 
                         card.bottom_cards = []
-
+                        column[row_num+row_len].append(card)
                         i += 1
 
             # places the remaining cards into the deal slot
@@ -278,7 +275,6 @@ class MyGame(arcade.Window):
                 # removing cards from slot lists
                 for i in range(4):
                     if using_card in all_slots[i]:
-                        print('card removed')
                         print(len(all_slots[i]))
                         all_slots[i].remove(using_card)
 
@@ -303,7 +299,6 @@ class MyGame(arcade.Window):
             # slots mechanics
             for i in range(4):
                 if x in range(other_slots_x[i], other_slots_x[i]+w) and y in range(other_slots_y, other_slots_y+h) and slot_card(using_card, all_slots[i]):
-                    print('card placed')
                     all_slots[i].append(using_card)
                     using_card.x = other_slots_x[i] + card_width // 2
                     using_card.y = other_slots_y + card_height // 2
