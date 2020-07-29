@@ -281,8 +281,8 @@ class MyGame(arcade.Window):
                 card_slotted = False
                 # card stacking mechanic
                 for top_card in PlayingCard.full_deck:
-                    if card in top_card.bottom_cards:
-                        top_card.bottom_cards.remove(card)
+                    if using_card in top_card.bottom_cards:
+                        top_card.bottom_cards.remove(using_card)
 
         # shuffle button
         if x in range(550, 701) and y in range(50, 101):
@@ -311,6 +311,9 @@ class MyGame(arcade.Window):
                     all_slots[i].append(using_card)
                     using_card.x = other_slots_x[i] + card_width // 2
                     using_card.y = other_slots_y + card_height // 2
+                    for j in range(4):
+                            if using_card in all_slots[j] and j != i:
+                                all_slots[j].remove(using_card)
 
             # card stacking mechanics
             for card in PlayingCard.full_deck:
