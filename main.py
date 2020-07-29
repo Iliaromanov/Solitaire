@@ -8,7 +8,8 @@ HEIGHT = 600
 start_game = False
 pick_up_card = False
 using_card = None
-card_placed = False
+card_stacked = False
+card_slotted = False
 
 card_width = 40
 card_height = 70
@@ -23,7 +24,7 @@ other_slots_y = 475
 card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 shuffled_cards = []
 deal_slot_cards = []
-
+columns = [[] for _ in range(8)]
 #     slot:  1   2   3   4
 all_slots = [[], [], [], []]
 
@@ -253,7 +254,7 @@ class MyGame(arcade.Window):
         """
         Called when the user presses a mouse button.
         """
-        global pick_up_card, using_card
+        global pick_up_card, using_card, card_stacked, card_slotted
         global deal_slot_x, deal_slot_y, deal_slot_cards, other_slots_x, other_slots_y, all_slots
         global card_height, card_width
         global start_game
@@ -273,19 +274,15 @@ class MyGame(arcade.Window):
             if x in range(card.x-w, card.x+w) and y in range(card.y-h, card.y+h):
                 card.old_x = card.x
                 card.old_y = card.y
-                pick_up_card = True
                 using_card = card
+                pick_up_card = True          
                 card.flipped = True
+                card_stacked = False
+                card_slotted = False
                 # card stacking mechanic
                 for top_card in PlayingCard.full_deck:
                     if card in top_card.bottom_cards:
                         top_card.bottom_cards.remove(card)
-                # removing cards from slot lists
-                for i in range(4):
-                    if using_card in all_slots[i]:
-                        print('card removed')
-                        print(len(all_slots[i]))
-                        all_slots[i].remove(using_card)
 
         # shuffle button
         if x in range(550, 701) and y in range(50, 101):
@@ -297,22 +294,20 @@ class MyGame(arcade.Window):
         """
         Called when a user releases a mouse button.
         """
-        global pick_up_card, using_card
+        global pick_up_card, using_card, card_stacked, card_slotted
         global other_slots_x, other_slots_y
         global card_width, card_height
-        global card_placed
 
         w = card_width
         h = card_height
 
         if pick_up_card and using_card != None:
-            if not card_placed:
-                using_card.x = using_card.old_x
-                using_card.y = using_card.old_y
+
             # slots mechanics
             for i in range(4):
                 if x in range(other_slots_x[i], other_slots_x[i]+w) and y in range(other_slots_y, other_slots_y+h) and slot_card(using_card, all_slots[i]):
-                    print('card placed')
+                    card_slotted = True
+                    card_stacked = False
                     all_slots[i].append(using_card)
                     using_card.x = other_slots_x[i] + card_width // 2
                     using_card.y = other_slots_y + card_height // 2
@@ -321,10 +316,20 @@ class MyGame(arcade.Window):
             for card in PlayingCard.full_deck:
                 if card_collision(card) and card.bottom_cards == [] and cards_stack(card):                    
                         card.bottom_cards.append(using_card)
+                        card_stacked = True
+                        card_slotted = False
                         for top_card in PlayingCard.full_deck:
                             if card in top_card.bottom_cards:
                                 top_card.bottom_cards.append(using_card)
-            
+                        # removing cards from slot lists
+                        for i in range(4):
+                            if using_card in all_slots[i]:
+                                all_slots[i].remove(using_card)
+
+            if not card_stacked and not card_slotted:
+                using_card.x = using_card.old_x
+                using_card.y = using_card.old_y
+
             pick_up_card = False
 
 def card_collision(card: PlayingCard) -> bool:
@@ -390,8 +395,8 @@ def slot_card(card: PlayingCard, slot: List[PlayingCard]) -> bool:
         return True
     elif slot != [] and card.value - 1 == slot[-1].value and card.suite == slot[-1].suite:
         return True
-    
-    return False
+    else:  
+        return False
 
 def main():
     PlayingCard.make_cards()
