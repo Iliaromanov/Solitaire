@@ -200,6 +200,7 @@ class MyGame(arcade.Window):
                             card.flipped = False
 
                         card.bottom_cards = []
+                        card.top_cards = []
 
                         i += 1
 
@@ -210,6 +211,7 @@ class MyGame(arcade.Window):
                 card.x = deal_slot_x
                 card.y = deal_slot_y
                 card.bottom_cards = []
+                card.top_cards = []
 
             # empties slot lists
             for i in range(4):
@@ -273,7 +275,7 @@ class MyGame(arcade.Window):
         # Picking up and clicking on individual cards
         for card in PlayingCard.full_deck:
             if x in range(card.x-w, card.x+w) and y in range(card.y-h, card.y+h):
-                print(f"{card.value}, len: {len(card.bottom_cards)}")
+                print(f"{card.value}, top: {len(card.top_cards)}, bottom: {len(card.bottom_cards)}")
                 card.old_x = card.x
                 card.old_y = card.y
                 using_card = card
@@ -320,10 +322,11 @@ class MyGame(arcade.Window):
             # card stacking mechanics
             for card in PlayingCard.full_deck:
                 if card_collision(card) and card.bottom_cards == [] and cards_stack(card):                    
-                    card.bottom_cards.append(using_card)
-                    using_card.top_cards.append(card)
+                    card.bottom_cards.append(using_card)  
                     card_stacked = True
                     card_slotted = False
+                    if card not in using_card.top_cards:
+                        using_card.top_cards.append(card)
                     for top_card in PlayingCard.full_deck:
                         if card in top_card.bottom_cards:
                             top_card.bottom_cards.append(using_card)
@@ -335,10 +338,14 @@ class MyGame(arcade.Window):
                             all_slots[i].remove(using_card)
 
             if not card_stacked and not card_slotted:
+                print(False)
                 using_card.x = using_card.old_x
                 using_card.y = using_card.old_y
+                if using_card.top_cards != []:
+                    c = using_card.top_cards[0] # the first top card
+                    c.bottom_cards.insert(0, using_card)
                 '''bug: top card gets unlinked from rest of stack'''
-                for card in using_card.top_cards:
+                for card in using_card.top_cards[1:]:
                     card.bottom_cards.append(using_card)
             
             pick_up_card = False
@@ -406,7 +413,7 @@ def slot_card(card: PlayingCard, slot: List[PlayingCard]) -> bool:
         return True
     elif slot != [] and card.value - 1 == slot[-1].value and card.suite == slot[-1].suite:
         return True
-    else:  
+    else:
         return False
 
 def main():
