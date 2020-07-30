@@ -46,6 +46,7 @@ class PlayingCard:
         self.old_y = y
         self.flipped = True
         self.bottom_cards = []
+        self.top_cards = []
         PlayingCard.full_deck.append(self)
 
     def __str__(self) -> str:
@@ -272,6 +273,7 @@ class MyGame(arcade.Window):
         # Picking up and clicking on individual cards
         for card in PlayingCard.full_deck:
             if x in range(card.x-w, card.x+w) and y in range(card.y-h, card.y+h):
+                print(f"{card.value}, len: {len(card.bottom_cards)}")
                 card.old_x = card.x
                 card.old_y = card.y
                 using_card = card
@@ -318,21 +320,27 @@ class MyGame(arcade.Window):
             # card stacking mechanics
             for card in PlayingCard.full_deck:
                 if card_collision(card) and card.bottom_cards == [] and cards_stack(card):                    
-                        card.bottom_cards.append(using_card)
-                        card_stacked = True
-                        card_slotted = False
-                        for top_card in PlayingCard.full_deck:
-                            if card in top_card.bottom_cards:
-                                top_card.bottom_cards.append(using_card)
-                        # removing cards from slot lists
-                        for i in range(4):
-                            if using_card in all_slots[i]:
-                                all_slots[i].remove(using_card)
+                    card.bottom_cards.append(using_card)
+                    using_card.top_cards.append(card)
+                    card_stacked = True
+                    card_slotted = False
+                    for top_card in PlayingCard.full_deck:
+                        if card in top_card.bottom_cards:
+                            top_card.bottom_cards.append(using_card)
+                            using_card.top_cards.append(top_card)
+
+                    # removing cards from slot lists
+                    for i in range(4):
+                        if using_card in all_slots[i]:
+                            all_slots[i].remove(using_card)
 
             if not card_stacked and not card_slotted:
                 using_card.x = using_card.old_x
                 using_card.y = using_card.old_y
-
+                '''bug: top card gets unlinked from rest of stack'''
+                for card in using_card.top_cards:
+                    card.bottom_cards.append(using_card)
+            
             pick_up_card = False
 
 def card_collision(card: PlayingCard) -> bool:
