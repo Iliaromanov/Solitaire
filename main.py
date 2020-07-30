@@ -330,7 +330,8 @@ class MyGame(arcade.Window):
                     for top_card in PlayingCard.full_deck:
                         if card in top_card.bottom_cards:
                             top_card.bottom_cards.append(using_card)
-                            using_card.top_cards.append(top_card)
+                            if top_card not in using_card.top_cards:
+                                using_card.top_cards.append(top_card)
 
                     # removing cards from slot lists
                     for i in range(4):
@@ -344,7 +345,6 @@ class MyGame(arcade.Window):
                 if using_card.top_cards != []:
                     c = using_card.top_cards[0] # the first top card
                     c.bottom_cards.insert(0, using_card)
-                '''bug: top card gets unlinked from rest of stack'''
                 for card in using_card.top_cards[1:]:
                     card.bottom_cards.append(using_card)
             
