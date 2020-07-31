@@ -5,6 +5,7 @@ from typing import List
 WIDTH = 800
 HEIGHT = 600
 
+in_game = False
 start_game = False
 pick_up_card = False
 using_card = None
@@ -23,8 +24,8 @@ other_slots_x = [570, 620, 670, 720]
 other_slots_y = 520
 all_slots = [[], [], [], []]
 
-columns = [[] for _ in range(8)]
-columns_x = [x for x in range(171, 571, 57)]
+columns = [[] for _ in range(7)]
+columns_x = [x for x in range(171, 514, 57)]
 columns_y = 400
 
 card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
@@ -99,12 +100,12 @@ class MyGame(arcade.Window):
         # and set them to None
 
     def setup(self):
-        # Create your sprites and sprite lists here
-        pass
+        PlayingCard.make_cards()
+
 
     def on_draw(self):
         arcade.start_render()
-        global start_game
+        global start_game, in_game
         global card_height, card_height, card_names, shuffled_cards
         global deal_slot_x, deal_slot_y, other_slots_x, other_slots_y
         global columns, columns_x, columns_y
@@ -169,9 +170,10 @@ class MyGame(arcade.Window):
             arcade.draw_rectangle_outline(other_slots_x[i], other_slots_y, card_width, card_height, arcade.color.BLUE)
 
         #column slots
-        for i in range(8):
-            if columns[i] == [] and pick_up_card and using_card.value == 13:
-                arcade.draw_rectangle_outline(columns_x[i], columns_y, card_width, card_height, arcade.color.BLUE)
+        if in_game:
+            for i in range(7):
+                if columns[i] == [] and pick_up_card and using_card.value == 13:
+                    arcade.draw_rectangle_outline(columns_x[i], columns_y, card_width, card_height, arcade.color.BLUE)
 
         # draw shuffle button used to shuffle and put the cards into playing formation
         arcade.draw_xywh_rectangle_filled(550, 50, 150, 50, arcade.color.GUPPIE_GREEN)
@@ -182,13 +184,20 @@ class MyGame(arcade.Window):
         """
         All the logic to move, and the game logic goes here.
         """
-        global shuffled_cards, deal_slot_cards, all_slots
-        global start_game
+        global shuffled_cards, deal_slot_cards, all_slots, columns
+        global start_game, in_game
         global deal_slot_x, deal_slot_y, card_width, card_height
         global using_card
 
-        # after shuffle button is pressed
+
         if start_game:
+            # empties slot lists
+            for i in range(4):
+                all_slots[i] = []
+            # empties column lists
+            for i in range(7):
+                columns[i] = []
+
             # places the first 28 cards in playing position
             i = 0
             while i < 28:
@@ -205,7 +214,8 @@ class MyGame(arcade.Window):
                             card.flipped = True
                         else:
                             card.flipped = False
-
+                        
+                        columns[row_num+row_len].append(card)
                         card.bottom_cards = []
                         card.top_cards = []
 
@@ -220,9 +230,6 @@ class MyGame(arcade.Window):
                 card.bottom_cards = []
                 card.top_cards = []
 
-            # empties slot lists
-            for i in range(4):
-                all_slots[i] = []
             
             start_game = False
 
@@ -267,7 +274,7 @@ class MyGame(arcade.Window):
         global pick_up_card, using_card, card_stacked, card_slotted
         global deal_slot_x, deal_slot_y, deal_slot_cards, other_slots_x, other_slots_y, all_slots
         global card_height, card_width
-        global start_game
+        global start_game, in_game
 
         w = card_width // 2
         h = card_height // 2
@@ -282,7 +289,6 @@ class MyGame(arcade.Window):
         # Picking up and clicking on individual cards
         for card in PlayingCard.full_deck:
             if x in range(card.x-w, card.x+w) and y in range(card.y-h, card.y+h):
-                print(f"{card.value}, top: {len(card.top_cards)}, bottom: {len(card.bottom_cards)}")
                 card.old_x = card.x
                 card.old_y = card.y
                 using_card = card
@@ -298,6 +304,7 @@ class MyGame(arcade.Window):
         # shuffle button
         if x in range(550, 701) and y in range(50, 101):
             PlayingCard.shuffle_cards()
+            in_game = True
             start_game = True
 
 
@@ -306,8 +313,9 @@ class MyGame(arcade.Window):
         Called when a user releases a mouse button.
         """
         global pick_up_card, using_card, card_stacked, card_slotted
-        global other_slots_x, other_slots_y
+        global other_slots_x, other_slots_y, all_slots
         global card_width, card_height
+        global columns, columns_x, columns_y
 
         w = card_width // 2
         h = card_height // 2
@@ -322,28 +330,66 @@ class MyGame(arcade.Window):
                     all_slots[i].append(using_card)
                     using_card.x = other_slots_x[i]
                     using_card.y = other_slots_y
+                    # removing card from other slot lists
                     for j in range(4):
-                            if using_card in all_slots[j] and j != i:
-                                all_slots[j].remove(using_card)
+                        if using_card in all_slots[j] and j != i:
+                            all_slots[j].remove(using_card)
+                    # removing card from column lists
+                    for col in range(7):
+                        if using_card in columns[col]:
+                            columns[col].remove(using_card)
+
+            # column slot mechanics
+            if in_game and using_card.value == 13:
+                for i in range(7):
+                        if x in range(columns_x[i]-w, columns_x[i]+w) and y in range(columns_y-h, columns_y+h) and columns[i] == []:
+                            columns[i].append(using_card)
+                            using_card.x = columns_x[i]
+                            using_card.y = columns_y
+                            card_slotted = True
+                            card_stacked = False
+
+                            for j in range(7):
+                                if j != i and using_card in columns[j]:
+                                    columns[j].remove(using_card) # removing from old column
+                                    for card in using_card.bottom_cards:
+                                        columns[j].remove(card) # removing from old column
+                                        columns[i].append(card) # appending to new column
+
 
             # card stacking mechanics
             for card in PlayingCard.full_deck:
                 if card_collision(card) and card.bottom_cards == [] and cards_stack(card):                    
-                    card.bottom_cards.append(using_card)  
+                    card.bottom_cards.append(using_card)
                     card_stacked = True
                     card_slotted = False
-                    if card not in using_card.top_cards:
-                        using_card.top_cards.append(card)
-                    for top_card in PlayingCard.full_deck:
-                        if card in top_card.bottom_cards:
-                            top_card.bottom_cards.append(using_card)
-                            if top_card not in using_card.top_cards:
-                                using_card.top_cards.append(top_card)
 
                     # removing cards from slot lists
                     for i in range(4):
                         if using_card in all_slots[i]:
                             all_slots[i].remove(using_card)
+                    # removing cards from column lists
+                    for i in range(7):
+                        if using_card in columns[i]:
+                            columns[i].remove(using_card)
+                            for c in using_card.bottom_cards:
+                                columns[i].remove(c)
+
+                    # appending cards to top_cards list
+                    if card not in using_card.top_cards:
+                        using_card.top_cards.append(card)
+                    # appending cards to bottom_cards list
+                    for top_card in PlayingCard.full_deck:
+                        if card in top_card.bottom_cards:
+                            top_card.bottom_cards.append(using_card)
+                            if top_card not in using_card.top_cards:
+                                using_card.top_cards.append(top_card)
+                    # appending cards to column lists
+                    for i in range(7):
+                        if card in columns[i]:
+                            columns[i].append(using_card)
+                            for c in using_card.bottom_cards:
+                                columns[i].append(c)
 
             if not card_stacked and not card_slotted:
                 print(False)
@@ -416,21 +462,21 @@ def cards_stack(card: PlayingCard) -> bool:
 def slot_card(card: PlayingCard, slot: List[PlayingCard]) -> bool:
     """Checks if card can be placed in the slot
     """
-    if card.value == 1 and slot == []:
-        return True
-    elif slot != [] and card.value - 1 == slot[-1].value and card.suite == slot[-1].suite:
-        return True
+    if card.bottom_cards == []:
+        if card.value == 1 and slot == []:
+            return True
+        elif slot != [] and card.value - 1 == slot[-1].value and card.suite == slot[-1].suite:
+            return True
+        else:
+            return False
     else:
         return False
 
 def main():
-    PlayingCard.make_cards()
     game = MyGame(WIDTH, HEIGHT, "Solitaire")
     game.setup()
     arcade.run()
 
 
-
 if __name__ == "__main__":
     main()
-
