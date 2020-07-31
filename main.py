@@ -330,6 +330,7 @@ class MyGame(arcade.Window):
                     all_slots[i].append(using_card)
                     using_card.x = other_slots_x[i]
                     using_card.y = other_slots_y
+                    using_card.top_cards = []
                     # removing card from other slot lists
                     for j in range(4):
                         if using_card in all_slots[j] and j != i:
@@ -355,7 +356,6 @@ class MyGame(arcade.Window):
                                     for card in using_card.bottom_cards:
                                         columns[j].remove(card) # removing from old column
                                         columns[i].append(card) # appending to new column
-
 
             # card stacking mechanics
             for card in PlayingCard.full_deck:
@@ -391,8 +391,8 @@ class MyGame(arcade.Window):
                             for c in using_card.bottom_cards:
                                 columns[i].append(c)
 
+            # Snap back mechanics
             if not card_stacked and not card_slotted:
-                print(False)
                 using_card.x = using_card.old_x
                 using_card.y = using_card.old_y
                 if using_card.top_cards != []:
