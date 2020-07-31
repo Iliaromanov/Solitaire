@@ -16,17 +16,18 @@ card_height = 70
 
 deal_slot_x = 57
 deal_slot_y = 510
+deal_slot_cards = []
 
 # x coordinates:  x1,  x2,  x3,  x4  
-other_slots_x = [550, 600, 650, 700]
-other_slots_y = 475
+other_slots_x = [570, 620, 670, 720]
+other_slots_y = 520
+all_slots = [[], [], [], []]
+
+columns = [[] for _ in range(8)]
+columns_x = [x for x in range(171, 571, 57)]
 
 card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 shuffled_cards = []
-deal_slot_cards = []
-columns = [[] for _ in range(8)]
-#     slot:  1   2   3   4
-all_slots = [[], [], [], []]
 
 class PlayingCard:
     """Creates and organizes the playing cards
@@ -150,8 +151,7 @@ class MyGame(arcade.Window):
                 arcade.draw_text("clubs", list(PlayingCard.clubs.values())[i].x-card_width//3, list(PlayingCard.clubs.values())[i].y-10, arcade.color.WHITE, font_size=8)
             i += 1
 
-        # redraw card
-        
+        # redraw card       
         for card in shuffled_cards:
                 if card.suite == 'hearts' or card.suite == 'diamonds':
                     arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)                       
@@ -164,7 +164,7 @@ class MyGame(arcade.Window):
         # draw slots for cards
         arcade.draw_rectangle_outline(deal_slot_x, deal_slot_y, card_width, card_height, arcade.color.BLUE)
         for i in range(4):
-            arcade.draw_xywh_rectangle_outline(other_slots_x[i], other_slots_y, card_width, card_height, arcade.color.BLUE)
+            arcade.draw_rectangle_outline(other_slots_x[i], other_slots_y, card_width, card_height, arcade.color.BLUE)
 
         # draw shuffle button used to shuffle and put the cards into playing formation
         arcade.draw_xywh_rectangle_filled(550, 50, 150, 50, arcade.color.GUPPIE_GREEN)
@@ -302,19 +302,19 @@ class MyGame(arcade.Window):
         global other_slots_x, other_slots_y
         global card_width, card_height
 
-        w = card_width
-        h = card_height
+        w = card_width // 2
+        h = card_height // 2
 
         if pick_up_card and using_card != None:
 
             # slots mechanics
             for i in range(4):
-                if x in range(other_slots_x[i], other_slots_x[i]+w) and y in range(other_slots_y, other_slots_y+h) and slot_card(using_card, all_slots[i]):
+                if x in range(other_slots_x[i]-w, other_slots_x[i]+w) and y in range(other_slots_y-h, other_slots_y+h) and slot_card(using_card, all_slots[i]):
                     card_slotted = True
                     card_stacked = False
                     all_slots[i].append(using_card)
-                    using_card.x = other_slots_x[i] + card_width // 2
-                    using_card.y = other_slots_y + card_height // 2
+                    using_card.x = other_slots_x[i]
+                    using_card.y = other_slots_y
                     for j in range(4):
                             if using_card in all_slots[j] and j != i:
                                 all_slots[j].remove(using_card)
