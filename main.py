@@ -154,15 +154,9 @@ class MyGame(arcade.Window):
                 arcade.draw_text("clubs", list(PlayingCard.clubs.values())[i].x-card_width//3, list(PlayingCard.clubs.values())[i].y-10, arcade.color.WHITE, font_size=8)
             i += 1
 
-        # redraw card       
+        # redraw card         
         for card in shuffled_cards:
-                if card.suite == 'hearts' or card.suite == 'diamonds':
-                    arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)                       
-                else:
-                    arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.BLACK)
-                if card.flipped:
-                    arcade.draw_text(card_names[card.value-1], card.x-card_width//4, card.y, color=arcade.color.WHITE)
-                    arcade.draw_text(card.suite, card.x-card_width//3, card.y-10, arcade.color.WHITE, font_size=8)
+            redraw(card)
                    
         # draw slots for cards
         arcade.draw_rectangle_outline(deal_slot_x, deal_slot_y, card_width, card_height, arcade.color.BLUE)
@@ -471,6 +465,20 @@ def slot_card(card: PlayingCard, slot: List[PlayingCard]) -> bool:
             return False
     else:
         return False
+
+def redraw(card: PlayingCard) -> None:
+    """Redraws cards in specified order so that the stack and are seen properly by the user
+    """
+    global card_width, card_height
+
+    if card.suite == 'hearts' or card.suite == 'diamonds':
+        arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)                       
+    else:
+        arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.BLACK)
+    
+    if card.flipped:
+        arcade.draw_text(card_names[card.value-1], card.x-card_width//4, card.y, color=arcade.color.WHITE)
+        arcade.draw_text(card.suite, card.x-card_width//3, card.y-10, arcade.color.WHITE, font_size=8)
 
 def main():
     game = MyGame(WIDTH, HEIGHT, "Solitaire")
