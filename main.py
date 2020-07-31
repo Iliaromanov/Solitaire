@@ -25,6 +25,7 @@ all_slots = [[], [], [], []]
 
 columns = [[] for _ in range(8)]
 columns_x = [x for x in range(171, 571, 57)]
+columns_y = 400
 
 card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 shuffled_cards = []
@@ -106,6 +107,7 @@ class MyGame(arcade.Window):
         global start_game
         global card_height, card_height, card_names, shuffled_cards
         global deal_slot_x, deal_slot_y, other_slots_x, other_slots_y
+        global columns, columns_x, columns_y
 
         # draw hearts playing cards
         for card in PlayingCard.hearts.values():
@@ -165,6 +167,11 @@ class MyGame(arcade.Window):
         arcade.draw_rectangle_outline(deal_slot_x, deal_slot_y, card_width, card_height, arcade.color.BLUE)
         for i in range(4):
             arcade.draw_rectangle_outline(other_slots_x[i], other_slots_y, card_width, card_height, arcade.color.BLUE)
+
+        #column slots
+        for i in range(8):
+            if columns[i] == [] and pick_up_card and using_card.value == 13:
+                arcade.draw_rectangle_outline(columns_x[i], columns_y, card_width, card_height, arcade.color.BLUE)
 
         # draw shuffle button used to shuffle and put the cards into playing formation
         arcade.draw_xywh_rectangle_filled(550, 50, 150, 50, arcade.color.GUPPIE_GREEN)
