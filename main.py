@@ -199,6 +199,9 @@ class MyGame(arcade.Window):
             # empties column lists
             for i in range(7):
                 columns[i] = []
+            # empties deal slot list and dealt cards list
+            deal_slot_cards = []
+            dealt_cards = []
 
             # places the first 28 cards in playing position
             i = 0
@@ -307,11 +310,13 @@ class MyGame(arcade.Window):
             card.y = deal_slot_y - card_height
             deal_slot_cards.remove(card)
             dealt_cards.append(card)
-
+            
             if deal_slot_cards == []:
                 for c in dealt_cards:
                     c.flipped = False
                     deal_slot_cards.append(c)
+                    dealt_cards.remove(card)
+            print(f"in_slot: {len(deal_slot_cards)}, out: {len(dealt_cards)}")
 
         # Picking up and clicking on individual cards
         for card in PlayingCard.full_deck:
@@ -392,7 +397,7 @@ class MyGame(arcade.Window):
 
             # card stacking mechanics
             for card in PlayingCard.full_deck:
-                if card_collision(card) and card.bottom_cards == [] and cards_stack(card):                    
+                if card_collision(card) and card.bottom_cards == [] and cards_stack(card) and card not in deal_slot_cards and card not in dealt_cards:                    
                     card.bottom_cards.append(using_card)
                     card_stacked = True
                     card_slotted = False
