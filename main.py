@@ -224,15 +224,20 @@ class MyGame(arcade.Window):
                 card.bottom_cards = []
                 card.top_cards = []
 
-            
             start_game = False
 
-        # card stacking
-        for top_card in PlayingCard.full_deck:
-            if top_card.bottom_cards != []:
-                card = top_card.bottom_cards[0]
-                card.x = top_card.x
-                card.y = top_card.y - card_height // 2
+        for card in PlayingCard.full_deck:
+            # card stacking
+            if card.bottom_cards != []:
+                bottom_card = card.bottom_cards[0]
+                bottom_card.x = card.x
+                bottom_card.y = card.y - card_height // 2
+            # in game card mechanics
+            if in_game:
+                for i in range(7):
+                    if card == columns[i][-1]:
+                        card.flipped = True
+
 
     '''
     def on_key_press(self, key, key_modifiers):
@@ -287,7 +292,6 @@ class MyGame(arcade.Window):
                 card.old_y = card.y
                 using_card = card
                 pick_up_card = True          
-                card.flipped = True
                 card_stacked = False
                 card_slotted = False
                 # card stacking mechanic
