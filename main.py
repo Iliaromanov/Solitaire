@@ -227,12 +227,15 @@ class MyGame(arcade.Window):
             for card in shuffled_cards[28:]:
                 deal_slot_cards.append(card)
                 card.flipped = True
-                card.x = deal_slot_x
-                card.y = deal_slot_y
                 card.bottom_cards = []
                 card.top_cards = []
 
             start_game = False
+
+        # card positioning
+        for card in deal_slot_cards:
+            card.x = deal_slot_x
+            card.y = deal_slot_y
 
         for card in PlayingCard.full_deck:
             # card stacking
@@ -256,6 +259,7 @@ class MyGame(arcade.Window):
                         c.flipped = True
                     else:
                         c.flipped = False
+                
 
     '''
     def on_key_press(self, key, key_modifiers):
@@ -306,6 +310,7 @@ class MyGame(arcade.Window):
 
             if deal_slot_cards == []:
                 for c in dealt_cards:
+                    c.flipped = False
                     deal_slot_cards.append(c)
 
         # Picking up and clicking on individual cards
