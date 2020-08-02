@@ -305,16 +305,19 @@ class MyGame(arcade.Window):
 
         # deal slot mechanics         
         if x in range(deal_slot_x-w, deal_slot_x+w) and y in range(deal_slot_y-h, deal_slot_y+h):
-            card = deal_slot_cards[-1]
-            card.x = deal_slot_x
-            card.y = deal_slot_y - card_height
-            deal_slot_cards.remove(card)
-            dealt_cards.append(card)
             
             if deal_slot_cards == []:
-                deal_slot_cards = dealt_cards
+                # resets deal slot if its empty
+                deal_slot_cards = dealt_cards[-1::-1]
                 dealt_cards = []
+            else:
+                # deals card
+                card = deal_slot_cards[-1]
+                card.y = deal_slot_y - card_height
+                deal_slot_cards.remove(card)
+                dealt_cards.append(card)
             print(f"in_slot: {len(deal_slot_cards)}, out: {len(dealt_cards)}")
+
 
         # Picking up and clicking on individual cards
         for card in PlayingCard.full_deck:
