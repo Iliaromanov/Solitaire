@@ -312,10 +312,8 @@ class MyGame(arcade.Window):
             dealt_cards.append(card)
             
             if deal_slot_cards == []:
-                for c in dealt_cards:
-                    c.flipped = False
-                    deal_slot_cards.append(c)
-                    dealt_cards.remove(card)
+                deal_slot_cards = dealt_cards
+                dealt_cards = []
             print(f"in_slot: {len(deal_slot_cards)}, out: {len(dealt_cards)}")
 
         # Picking up and clicking on individual cards
