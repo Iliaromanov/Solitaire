@@ -18,6 +18,7 @@ card_height = 70
 deal_slot_x = 57
 deal_slot_y = 510
 deal_slot_cards = []
+dealt_cards = []
 
 # x coordinates:  x1,  x2,  x3,  x4  
 other_slots_x = [570, 620, 670, 720]
@@ -102,13 +103,13 @@ class MyGame(arcade.Window):
     def setup(self):
         PlayingCard.make_cards()
 
-
     def on_draw(self):
         arcade.start_render()
         global start_game, in_game
-        global card_height, card_height, card_names, shuffled_cards
-        global deal_slot_x, deal_slot_y, other_slots_x, other_slots_y
+        global card_height, card_height, card_names
+        global deal_slot_x, deal_slot_y, other_slots_x, other_slots_y, all_slots
         global columns, columns_x, columns_y
+        global shuffled_cards, deal_slot_cards, dealt_cards
 
         # draw hearts playing cards
         for card in PlayingCard.hearts.values():
@@ -157,7 +158,15 @@ class MyGame(arcade.Window):
         # redraw card         
         for card in shuffled_cards:
             redraw(card)
-                   
+        for card in dealt_cards:
+            redraw(card)
+        for i in range(4):
+            for card in all_slots[i]:
+                redraw(card)
+        for i in range(7):
+            for card in columns[i]:
+                redraw(card)
+
         # draw slots for cards
         arcade.draw_rectangle_outline(deal_slot_x, deal_slot_y, card_width, card_height, arcade.color.BLUE)
         for i in range(4):
@@ -173,12 +182,11 @@ class MyGame(arcade.Window):
         arcade.draw_xywh_rectangle_filled(550, 50, 150, 50, arcade.color.GUPPIE_GREEN)
         arcade.draw_text('Shuffle', 590, 65, arcade.color.BLACK, 20)
 
-
     def update(self, delta_time):
         """
         All the logic to move, and the game logic goes here.
         """
-        global shuffled_cards, deal_slot_cards, all_slots, columns
+        global shuffled_cards, deal_slot_cards, dealt_cards, all_slots, columns
         global start_game, in_game
         global deal_slot_x, deal_slot_y, card_width, card_height
         global using_card
@@ -232,12 +240,22 @@ class MyGame(arcade.Window):
                 bottom_card = card.bottom_cards[0]
                 bottom_card.x = card.x
                 bottom_card.y = card.y - card_height // 2
-            # in game card mechanics
+            
             if in_game:
+                # in game card flip mechanics
                 for i in range(7):
-                    if card == columns[i][-1]:
+                    if columns[i] != [] and card == columns[i][-1]:
                         card.flipped = True
-
+                for c in dealt_cards:
+                    if dealt_cards != [] and c == dealt_cards[-1]:
+                        c.flipped = True
+                    else:
+                        c.flipped = False
+                for c in deal_slot_cards:
+                    if deal_slot_cards != [] and c == deal_slot_cards[-1]:
+                        c.flipped = True
+                    else:
+                        c.flipped = False
 
     '''
     def on_key_press(self, key, key_modifiers):
@@ -271,7 +289,7 @@ class MyGame(arcade.Window):
         Called when the user presses a mouse button.
         """
         global pick_up_card, using_card, card_stacked, card_slotted
-        global deal_slot_x, deal_slot_y, deal_slot_cards, other_slots_x, other_slots_y, all_slots
+        global deal_slot_x, deal_slot_y, deal_slot_cards, dealt_cards, other_slots_x, other_slots_y, all_slots
         global card_height, card_width
         global start_game, in_game
 
@@ -280,14 +298,19 @@ class MyGame(arcade.Window):
 
         # deal slot mechanics         
         if x in range(deal_slot_x-w, deal_slot_x+w) and y in range(deal_slot_y-h, deal_slot_y+h):
-            card = deal_slot_cards[-1]            
+            card = deal_slot_cards[-1]
             card.x = deal_slot_x
             card.y = deal_slot_y - card_height
             deal_slot_cards.remove(card)
+            dealt_cards.append(card)
+
+            if deal_slot_cards == []:
+                for c in dealt_cards:
+                    deal_slot_cards.append(c)
 
         # Picking up and clicking on individual cards
         for card in PlayingCard.full_deck:
-            if x in range(card.x-w, card.x+w) and y in range(card.y-h, card.y+h):
+            if x in range(card.x-w, card.x+w) and y in range(card.y-h, card.y+h) and card.flipped:
                 card.old_x = card.x
                 card.old_y = card.y
                 using_card = card
@@ -311,7 +334,7 @@ class MyGame(arcade.Window):
         Called when a user releases a mouse button.
         """
         global pick_up_card, using_card, card_stacked, card_slotted
-        global other_slots_x, other_slots_y, all_slots
+        global other_slots_x, other_slots_y, all_slots, dealt_cards
         global card_width, card_height
         global columns, columns_x, columns_y
 
@@ -337,23 +360,30 @@ class MyGame(arcade.Window):
                     for col in range(7):
                         if using_card in columns[col]:
                             columns[col].remove(using_card)
+                    # removing card from dealt_cards
+                    if using_card in dealt_cards:
+                        dealt_cards.remove(using_card)
 
             # column slot mechanics
             if in_game and using_card.value == 13:
                 for i in range(7):
-                        if x in range(columns_x[i]-w, columns_x[i]+w) and y in range(columns_y-h, columns_y+h) and columns[i] == []:
-                            columns[i].append(using_card)
-                            using_card.x = columns_x[i]
-                            using_card.y = columns_y
-                            card_slotted = True
-                            card_stacked = False
+                    if x in range(columns_x[i]-w, columns_x[i]+w) and y in range(columns_y-h, columns_y+h) and columns[i] == []:
+                        columns[i].append(using_card)
+                        using_card.x = columns_x[i]
+                        using_card.y = columns_y
+                        card_slotted = True
+                        card_stacked = False
 
-                            for j in range(7):
-                                if j != i and using_card in columns[j]:
-                                    columns[j].remove(using_card) # removing from old column
-                                    for card in using_card.bottom_cards:
-                                        columns[j].remove(card) # removing from old column
-                                        columns[i].append(card) # appending to new column
+                        # removing card from dealt_cards
+                        if using_card in dealt_cards:
+                            dealt_cards.remove(using_card)
+
+                        for j in range(7):
+                            if j != i and using_card in columns[j]:
+                                columns[j].remove(using_card) # removing from old column
+                                for card in using_card.bottom_cards:
+                                    columns[j].remove(card) # removing from old column
+                                    columns[i].append(card) # appending to new column
 
             # card stacking mechanics
             for card in PlayingCard.full_deck:
@@ -362,6 +392,9 @@ class MyGame(arcade.Window):
                     card_stacked = True
                     card_slotted = False
 
+                    # removing card from dealt_cards
+                    if using_card in dealt_cards:
+                        dealt_cards.remove(using_card)
                     # removing cards from slot lists
                     for i in range(4):
                         if using_card in all_slots[i]:
