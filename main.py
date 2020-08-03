@@ -305,7 +305,7 @@ class MyGame(arcade.Window):
 
         # deal slot mechanics         
         if x in range(deal_slot_x-w, deal_slot_x+w) and y in range(deal_slot_y-h, deal_slot_y+h):
-            
+
             if deal_slot_cards == []:
                 # resets deal slot if its empty
                 deal_slot_cards = dealt_cards[-1::-1]
@@ -393,8 +393,8 @@ class MyGame(arcade.Window):
                             if j != i and using_card in columns[j]:
                                 columns[j].remove(using_card) # removing from old column
                                 for card in using_card.bottom_cards:
-                                    columns[j].remove(card) # removing from old column
                                     columns[i].append(card) # appending to new column
+                                    columns[j].remove(card) # removing from old column
 
             # card stacking mechanics
             for card in PlayingCard.full_deck:
