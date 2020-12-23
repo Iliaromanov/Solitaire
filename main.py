@@ -368,14 +368,17 @@ class MyGame(arcade.Window):
                     using_card.x = other_slots_x[i]
                     using_card.y = other_slots_y
                     using_card.top_cards = []
+
                     # removing card from other slot lists
                     for j in range(4):
                         if using_card in all_slots[j] and j != i:
                             all_slots[j].remove(using_card)
+
                     # removing card from column lists
                     for col in range(7):
                         if using_card in columns[col]:
                             columns[col].remove(using_card)
+
                     # removing card from dealt_cards
                     if using_card in dealt_cards:
                         dealt_cards.remove(using_card)
@@ -411,10 +414,12 @@ class MyGame(arcade.Window):
                     # removing card from dealt_cards
                     if using_card in dealt_cards:
                         dealt_cards.remove(using_card)
+
                     # removing cards from slot lists
                     for i in range(4):
                         if using_card in all_slots[i]:
                             all_slots[i].remove(using_card)
+
                     # removing cards from column lists
                     for i in range(7):
                         if using_card in columns[i]:
@@ -425,12 +430,14 @@ class MyGame(arcade.Window):
                     # appending cards to top_cards list
                     if card not in using_card.top_cards:
                         using_card.top_cards.append(card)
+
                     # appending cards to bottom_cards list
                     for top_card in PlayingCard.full_deck:
                         if card in top_card.bottom_cards:
                             top_card.bottom_cards.append(using_card)
                             if top_card not in using_card.top_cards:
                                 using_card.top_cards.append(top_card)
+
                     # appending cards to column lists
                     for i in range(7):
                         if card in columns[i]:
@@ -452,7 +459,7 @@ class MyGame(arcade.Window):
 
 def card_collision(card: PlayingCard) -> bool:
     """
-    Checks if using card and another playing card have collided
+    Checks if using_card and another playing card have collided
     """
     global using_card
     global card_width, card_height
@@ -470,13 +477,15 @@ def card_collision(card: PlayingCard) -> bool:
     collision_b = False
 
     if using_card != card and card not in using_card.bottom_cards:
-        # cards in placements slots
+        # cards in placement slots
         for i in range(4):
             if using_card.x in range(other_slots_x[i], other_slots_x[i]+w) and using_card.y in range(other_slots_y, other_slots_y+h):
                 return False
+
         # cards in deal slot
         if using_card.x in range(deal_slot_x-w//2, deal_slot_x+w//2) and using_card.y in range(deal_slot_y-h//2, deal_slot_y+h//2):
             return False
+
         # normal card collision
         elif using_card.x in range(card_x[0], card_x[1]) and using_card.y in range(card_y[0], card_y[1]):
             collision_a = True
@@ -507,7 +516,7 @@ def cards_stack(card: PlayingCard) -> bool:
 
 
 def slot_card(card: PlayingCard, slot: List[PlayingCard]) -> bool:
-    """Checks if card can be placed in the slot
+    """Checks if given card can be placed into given slot
     """
     if card.bottom_cards == []:
         if card.value == 1 and slot == []:
@@ -520,7 +529,7 @@ def slot_card(card: PlayingCard, slot: List[PlayingCard]) -> bool:
         return False
 
 def redraw(card: PlayingCard) -> None:
-    """Redraws cards in specified order so that the stack and are seen properly by the user
+    """Redraws cards in specified order so that the stack of cards is seen properly by the user
     """
     global card_width, card_height
 
