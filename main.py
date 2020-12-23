@@ -12,9 +12,11 @@ using_card = None
 card_stacked = False
 card_slotted = False
 
+# Card parameters
 card_width = 40
 card_height = 70
 
+# Main deal slot coordinates and card storage lists
 deal_slot_x = 57
 deal_slot_y = 510
 deal_slot_cards = []
