@@ -12,9 +12,11 @@ using_card = None
 card_stacked = False
 card_slotted = False
 
+# Card parameters
 card_width = 40
 card_height = 70
 
+# Main deal slot coordinates and card storage lists
 deal_slot_x = 57
 deal_slot_y = 510
 deal_slot_cards = []
@@ -25,7 +27,10 @@ other_slots_x = [570, 620, 670, 720]
 other_slots_y = 520
 all_slots = [[], [], [], []]
 
+# Stack for each of the seven card columns at the start of game
 columns = [[] for _ in range(7)]
+
+# Coordinates of card columns
 columns_x = [x for x in range(171, 514, 57)]
 columns_y = 400
 
