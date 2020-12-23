@@ -27,7 +27,10 @@ other_slots_x = [570, 620, 670, 720]
 other_slots_y = 520
 all_slots = [[], [], [], []]
 
+# Stack for each of the seven card columns at the start of game
 columns = [[] for _ in range(7)]
+
+# Coordinates of card columns
 columns_x = [x for x in range(171, 514, 57)]
 columns_y = 400
 
