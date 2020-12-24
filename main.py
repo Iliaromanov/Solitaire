@@ -19,14 +19,6 @@ shuffle_button_y = HEIGHT // 12
 shuffle_text_x = shuffle_button_x + 40
 shuffle_text_y = shuffle_button_y + 15
 
-in_game = False
-start_game = False
-pick_up_card = False
-using_card = None
-card_stacked = False
-card_slotted = False
-
-
 # Main deal slot coordinates and card storage lists
 deal_slot_x = WIDTH // 14
 deal_slot_y = HEIGHT - 90
@@ -38,17 +30,28 @@ other_slots_x = [math.floor(WIDTH/(800/num)) for num in range(570, 721, 50)]
 other_slots_y = HEIGHT - 80
 all_slots = [[], [], [], []]
 
-# Stack for each of the seven card columns at the start of game
-columns = [[] for _ in range(7)]
-
 # Coordinates of card columns 
 columns_x = [math.floor(WIDTH / (800/x)) for x in range(171, 514, 57)]
 columns_y = math.floor(HEIGHT / 1.5)
 
+# Cosntants to shift x and y values relative to game window size
+x_shift = math.floor(WIDTH / (800/57))
+y_shift = math.floor(HEIGHT / (800/75))
+
+in_game = False
+start_game = False
+pick_up_card = False
+using_card = None
+card_stacked = False
+card_slotted = False
+
+# Stack for each of the seven card columns at the start of game
+columns = [[] for _ in range(7)]
+
 card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 shuffled_cards = []
 
-# This section loads required images by asking for a path to the images directory from the user
+# This section loads required images by asking the user for a path to their images directory
 # sample path: c:/Users/iliarom.BASE.000/Desktop/GitHub/Solitaire/images
 path = input("Please enter path to your images directory (sample path: c:/Users/iliarom.BASE.000/Desktop/GitHub/Solitaire/images): ")
 img_paths = [f"images/{card}" for card in os.listdir(path)]
@@ -88,22 +91,22 @@ class PlayingCard:
 
         i = 0
         while i < 13:
-            cls.hearts[card_names[i]] = PlayingCard(i+1, 'hearts', (i+1) * 57, 400)           
+            cls.hearts[card_names[i]] = PlayingCard(i+1, 'hearts', (i+1) * x_shift, columns_y)           
             i += 1
 
         j = 0
         while j < 13:
-            cls.diamonds[card_names[j]] = PlayingCard(j+1, 'diamonds', (j+1) * 57, 325)            
+            cls.diamonds[card_names[j]] = PlayingCard(j+1, 'diamonds', (j+1) * x_shift, columns_y - y_shift)            
             j += 1
 
         k = 0
         while k < 13:
-            cls.spades[card_names[k]] = PlayingCard(k+1, 'spades', (k+1) * 57, 250)          
+            cls.spades[card_names[k]] = PlayingCard(k+1, 'spades', (k+1) * x_shift, columns_y - y_shift * 2)          
             k += 1
 
         l = 0
         while l < 13:
-            cls.clubs[card_names[l]] = PlayingCard(l+1, 'clubs', (l+1) * 57, 175)            
+            cls.clubs[card_names[l]] = PlayingCard(l+1, 'clubs', (l+1) * x_shift, columns_y - y_shift * 3)            
             l += 1
 
         # Attaching images to each card object
@@ -223,7 +226,7 @@ class MyGame(arcade.Window):
         global HEIGHT, WIDTH
         global shuffled_cards, deal_slot_cards, dealt_cards, all_slots, columns
         global start_game, in_game
-        global deal_slot_x, deal_slot_y, columns_x, columns_y, card_width, card_height
+        global deal_slot_x, deal_slot_y, columns_x, columns_y, card_width, card_height, x_shift
         global using_card
 
 
@@ -245,9 +248,9 @@ class MyGame(arcade.Window):
                     for row_len in range(7 - row_num):
 
                         card = shuffled_cards[i] 
-                        start_x = math.floor(WIDTH / (800/171)) + row_num * math.floor(WIDTH / (800/57))    
+                        start_x = math.floor(WIDTH / (800/171)) + row_num * x_shift    
 
-                        card.x = start_x + math.floor(WIDTH / (800/57)) * (row_len)
+                        card.x = start_x + x_shift * (row_len)
                         card.y = columns_y - card_height // 2 * (row_num)
                         
                         if row_len == 0:
