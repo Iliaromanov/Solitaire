@@ -15,8 +15,8 @@ card_stacked = False
 card_slotted = False
 
 # Card parameters
-card_width = 40
-card_height = 70
+card_width = 45
+card_height = 75
 
 # Main deal slot coordinates and card storage lists
 deal_slot_x = 57
@@ -41,9 +41,8 @@ shuffled_cards = []
 
 # This section is to load required images
 # sample path: c:/Users/iliarom.BASE.000/Desktop/GitHub/Solitaire/images
-path = input("Please eneter path to your images directory: ")
+path = input("Please enter path to your images directory: ")
 img_paths = [f"images/{card}" for card in os.listdir(path)]
-print(img_paths)
 card_imgs = [arcade.load_texture(texture) for texture in img_paths]
 
 
@@ -547,15 +546,20 @@ def redraw(card: PlayingCard) -> None:
     """Redraws cards in specified order so that the stack of cards is seen properly by the user
     """
     global card_width, card_height
+    global card_imgs
 
     if card.suite == 'hearts' or card.suite == 'diamonds':
-        arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)                       
+        arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)
+        arcade.draw_texture_rectangle(card.x, card.y, card_width, card_height, card.image)                       
     else:
         arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.BLACK)
+        arcade.draw_texture_rectangle(card.x, card.y, card_width, card_height, card.image)
     
     if card.flipped:
         arcade.draw_text(card_names[card.value-1], card.x-card_width//4, card.y, color=arcade.color.WHITE)
         arcade.draw_text(card.suite, card.x-card_width//3, card.y-10, arcade.color.WHITE, font_size=8)
+    else:
+        arcade.draw_texture_rectangle(card.x, card.y, card_width, card_height, card_imgs[-1])
 
 def main():
     game = MyGame(WIDTH, HEIGHT, "Solitaire")
