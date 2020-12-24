@@ -7,6 +7,10 @@ from typing import List
 WIDTH = 800
 HEIGHT = 600
 
+# Card parameters
+card_width = 45
+card_height = 75
+
 in_game = False
 start_game = False
 pick_up_card = False
@@ -14,9 +18,6 @@ using_card = None
 card_stacked = False
 card_slotted = False
 
-# Card parameters
-card_width = 45
-card_height = 75
 
 # Main deal slot coordinates and card storage lists
 deal_slot_x = 57
@@ -39,11 +40,11 @@ columns_y = 400
 card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 shuffled_cards = []
 
-# This section is to load required images
+# This section loads required images by asking for a path to the images directory from the user
 # sample path: c:/Users/iliarom.BASE.000/Desktop/GitHub/Solitaire/images
-path = input("Please enter path to your images directory: ")
+path = input("Please enter path to your images directory (sample path: c:/Users/iliarom.BASE.000/Desktop/GitHub/Solitaire/images): ")
 img_paths = [f"images/{card}" for card in os.listdir(path)]
-card_imgs = [arcade.load_texture(texture) for texture in img_paths]
+card_imgs = {texture: arcade.load_texture(texture) for texture in img_paths}
 
 
 class PlayingCard:
@@ -55,8 +56,8 @@ class PlayingCard:
     spades = {}
     clubs = {}
 
-    def __init__(self, card_image, value: int, suite: str, x: int, y: int):
-        self.image = card_image
+    def __init__(self, value: int, suite: str, x: int, y: int):
+        self.image = None
         self.value = value
         self.suite = suite
         self.x = x
@@ -79,23 +80,28 @@ class PlayingCard:
 
         i = 0
         while i < 13:
-            cls.hearts[card_names[i]] = PlayingCard(card_imgs[i], i+1, 'hearts', (i+1) * 57, 400)           
+            cls.hearts[card_names[i]] = PlayingCard(i+1, 'hearts', (i+1) * 57, 400)           
             i += 1
 
         j = 0
         while j < 13:
-            cls.diamonds[card_names[j]] = PlayingCard(card_imgs[j+13], j+1, 'diamonds', (j+1) * 57, 325)            
+            cls.diamonds[card_names[j]] = PlayingCard(j+1, 'diamonds', (j+1) * 57, 325)            
             j += 1
 
         k = 0
         while k < 13:
-            cls.spades[card_names[k]] = PlayingCard(card_imgs[k+26], k+1, 'spades', (k+1) * 57, 250)          
+            cls.spades[card_names[k]] = PlayingCard(k+1, 'spades', (k+1) * 57, 250)          
             k += 1
 
         l = 0
         while l < 13:
-            cls.clubs[card_names[l]] = PlayingCard(card_imgs[l+39], l+1, 'clubs', (l+1) * 57, 175)            
+            cls.clubs[card_names[l]] = PlayingCard(l+1, 'clubs', (l+1) * 57, 175)            
             l += 1
+
+        # Attaching images to each card object
+        for card in cls.full_deck:
+            card.image = card_imgs[f"images/{card.suite}{card.value}.jpg"]
+
 
     @classmethod
     def shuffle_cards(cls):
@@ -559,7 +565,7 @@ def redraw(card: PlayingCard) -> None:
         arcade.draw_text(card_names[card.value-1], card.x-card_width//4, card.y, color=arcade.color.WHITE)
         arcade.draw_text(card.suite, card.x-card_width//3, card.y-10, arcade.color.WHITE, font_size=8)
     else:
-        arcade.draw_texture_rectangle(card.x, card.y, card_width, card_height, card_imgs[-1])
+        arcade.draw_texture_rectangle(card.x, card.y, card_width, card_height, card_imgs["images/blue_back.jpg"])
 
 def main():
     game = MyGame(WIDTH, HEIGHT, "Solitaire")
