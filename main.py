@@ -11,7 +11,7 @@ HEIGHT = 800
 
 # Card parameters
 card_width = WIDTH // 20
-card_height = HEIGHT // 8
+card_height = HEIGHT // 9
 
 # Shuffle button coordinates
 shuffle_button_x = math.floor(WIDTH / (800/550))
@@ -41,8 +41,8 @@ all_slots = [[], [], [], []]
 # Stack for each of the seven card columns at the start of game
 columns = [[] for _ in range(7)]
 
-# Coordinates of card columns math.floor(WIDTH / (800/x))
-columns_x = [x for x in range(171, 514, 57)]
+# Coordinates of card columns 
+columns_x = [math.floor(WIDTH / (800/x)) for x in range(171, 514, 57)]
 columns_y = math.floor(HEIGHT / 1.5)
 
 card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
@@ -220,9 +220,10 @@ class MyGame(arcade.Window):
         """
         All the logic to move, and the game logic goes here.
         """
+        global HEIGHT, WIDTH
         global shuffled_cards, deal_slot_cards, dealt_cards, all_slots, columns
         global start_game, in_game
-        global deal_slot_x, deal_slot_y, card_width, card_height
+        global deal_slot_x, deal_slot_y, columns_x, columns_y, card_width, card_height
         global using_card
 
 
@@ -244,10 +245,10 @@ class MyGame(arcade.Window):
                     for row_len in range(7 - row_num):
 
                         card = shuffled_cards[i] 
-                        start_x = 171 + row_num*57    
+                        start_x = math.floor(WIDTH / (800/171)) + row_num * math.floor(WIDTH / (800/57))    
 
-                        card.x = start_x + 57 * (row_len)
-                        card.y = 400 - card_height // 2 * (row_num) 
+                        card.x = start_x + math.floor(WIDTH / (800/57)) * (row_len)
+                        card.y = columns_y - card_height // 2 * (row_num)
                         
                         if row_len == 0:
                             card.flipped = True
