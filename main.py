@@ -111,7 +111,7 @@ class PlayingCard:
 
         # Attaching images to each card object
         for card in cls.full_deck:
-            card.image = card_imgs[f"images/{card.suite}{card.value}.jpg"]
+            card.image = card_imgs[f"images/{card.suite}{card.value}.png"]
 
 
     @classmethod
@@ -579,7 +579,7 @@ def redraw(card: PlayingCard) -> None:
         arcade.draw_text(card_names[card.value-1], card.x-card_width//4, card.y, color=arcade.color.WHITE)
         arcade.draw_text(card.suite, card.x-card_width//3, card.y-10, arcade.color.WHITE, font_size=8)
     else:
-        arcade.draw_texture_rectangle(card.x, card.y, card_width, card_height, card_imgs["images/blue_back.jpg"])
+        arcade.draw_texture_rectangle(card.x, card.y, card_width, card_height, card_imgs["images/blue_back.png"])
 
 def main():
     game = MyGame(WIDTH, HEIGHT, "Solitaire")
