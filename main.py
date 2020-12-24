@@ -1,15 +1,23 @@
 import arcade
+import math
 import os, os.path
 import random
 from PIL import Image
 from typing import List
 
-WIDTH = 800
-HEIGHT = 600
+# Game window parameters
+WIDTH = 1000
+HEIGHT = 800
 
 # Card parameters
-card_width = 45
-card_height = 75
+card_width = WIDTH // 20
+card_height = HEIGHT // 8
+
+# Shuffle button coordinates
+shuffle_button_x = math.floor(WIDTH / (800/550))
+shuffle_button_y = HEIGHT // 12
+shuffle_text_x = shuffle_button_x + 40
+shuffle_text_y = shuffle_button_y + 15
 
 in_game = False
 start_game = False
@@ -20,22 +28,22 @@ card_slotted = False
 
 
 # Main deal slot coordinates and card storage lists
-deal_slot_x = 57
-deal_slot_y = 510
+deal_slot_x = WIDTH // 14
+deal_slot_y = HEIGHT - 90
 deal_slot_cards = []
 dealt_cards = []
 
-# x coordinates:  x1,  x2,  x3,  x4  
-other_slots_x = [570, 620, 670, 720]
-other_slots_y = 520
+# Stacking slot coordinates and card storage lists
+other_slots_x = [math.floor(WIDTH/(800/num)) for num in range(570, 721, 50)]
+other_slots_y = HEIGHT - 80
 all_slots = [[], [], [], []]
 
 # Stack for each of the seven card columns at the start of game
 columns = [[] for _ in range(7)]
 
-# Coordinates of card columns
+# Coordinates of card columns math.floor(WIDTH / (800/x))
 columns_x = [x for x in range(171, 514, 57)]
-columns_y = 400
+columns_y = math.floor(HEIGHT / 1.5)
 
 card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 shuffled_cards = []
@@ -131,6 +139,7 @@ class MyGame(arcade.Window):
         global deal_slot_x, deal_slot_y, other_slots_x, other_slots_y, all_slots
         global columns, columns_x, columns_y
         global shuffled_cards, deal_slot_cards, dealt_cards
+        global shuffle_button_x, shuffle_button_y, shuffle_text_x, shuffle_text_y
 
         # draw hearts playing cards
         for card in PlayingCard.hearts.values():
@@ -204,8 +213,8 @@ class MyGame(arcade.Window):
                     arcade.draw_rectangle_outline(columns_x[i], columns_y, card_width, card_height, arcade.color.BLUE)
 
         # draw shuffle button used to shuffle and put the cards into playing formation
-        arcade.draw_xywh_rectangle_filled(550, 50, 150, 50, arcade.color.GUPPIE_GREEN)
-        arcade.draw_text('Shuffle', 590, 65, arcade.color.BLACK, 20)
+        arcade.draw_xywh_rectangle_filled(shuffle_button_x, shuffle_button_y, 150, 50, arcade.color.GUPPIE_GREEN)
+        arcade.draw_text('Shuffle', shuffle_text_x, shuffle_text_y, arcade.color.BLACK, 20)
 
     def update(self, delta_time):
         """
@@ -324,6 +333,7 @@ class MyGame(arcade.Window):
         global deal_slot_x, deal_slot_y, deal_slot_cards, dealt_cards, other_slots_x, other_slots_y, all_slots
         global card_height, card_width
         global start_game, in_game
+        global shuffle_button_x, shuffle_button_y
 
         w = card_width // 2
         h = card_height // 2
@@ -359,7 +369,7 @@ class MyGame(arcade.Window):
                         top_card.bottom_cards.remove(using_card)
 
         # shuffle button
-        if x in range(550, 701) and y in range(50, 101):
+        if x in range(shuffle_button_x, shuffle_button_x+151) and y in range(shuffle_button_y,shuffle_button_y+51):
             PlayingCard.shuffle_cards()
             in_game = True
             start_game = True
