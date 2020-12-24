@@ -1,5 +1,7 @@
 import arcade
+import os, os.path
 import random
+from PIL import Image
 from typing import List
 
 WIDTH = 800
@@ -37,6 +39,14 @@ columns_y = 400
 card_names = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 shuffled_cards = []
 
+# This section is to load required images
+# sample path: c:/Users/iliarom.BASE.000/Desktop/GitHub/Solitaire/images
+path = input("Please eneter path to your images directory: ")
+img_paths = [f"images/{card}" for card in os.listdir(path)]
+print(img_paths)
+card_imgs = [arcade.load_texture(texture) for texture in img_paths]
+
+
 class PlayingCard:
     """Creates and organizes the playing cards
     """
@@ -46,7 +56,8 @@ class PlayingCard:
     spades = {}
     clubs = {}
 
-    def __init__(self, value: int, suite: str, x: int, y: int):
+    def __init__(self, card_image, value: int, suite: str, x: int, y: int):
+        self.image = card_image
         self.value = value
         self.suite = suite
         self.x = x
@@ -69,22 +80,22 @@ class PlayingCard:
 
         i = 0
         while i < 13:
-            cls.hearts[card_names[i]] = PlayingCard(i+1, 'hearts', (i+1) * 57, 400)           
+            cls.hearts[card_names[i]] = PlayingCard(card_imgs[i], i+1, 'hearts', (i+1) * 57, 400)           
             i += 1
 
         j = 0
         while j < 13:
-            cls.diamonds[card_names[j]] = PlayingCard(j+1, 'diamonds', (j+1) * 57, 325)            
+            cls.diamonds[card_names[j]] = PlayingCard(card_imgs[j+13], j+1, 'diamonds', (j+1) * 57, 325)            
             j += 1
 
         k = 0
         while k < 13:
-            cls.spades[card_names[k]] = PlayingCard(k+1, 'spades', (k+1) * 57, 250)          
+            cls.spades[card_names[k]] = PlayingCard(card_imgs[k+26], k+1, 'spades', (k+1) * 57, 250)          
             k += 1
 
         l = 0
         while l < 13:
-            cls.clubs[card_names[l]] = PlayingCard(l+1, 'clubs', (l+1) * 57, 175)            
+            cls.clubs[card_names[l]] = PlayingCard(card_imgs[l+39], l+1, 'clubs', (l+1) * 57, 175)            
             l += 1
 
     @classmethod
@@ -119,6 +130,7 @@ class MyGame(arcade.Window):
         # draw hearts playing cards
         for card in PlayingCard.hearts.values():
             arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)
+            arcade.draw_texture_rectangle(card.x, card.y, card_width, card_height, card.image)
 
         i = 0
         while i < 13:
@@ -130,6 +142,7 @@ class MyGame(arcade.Window):
         # draw diamonds playing cards
         for card in PlayingCard.diamonds.values():
             arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.RED)
+            arcade.draw_texture_rectangle(card.x, card.y, card_width, card_height, card.image)
 
         i = 0
         while i < 13:
@@ -141,6 +154,7 @@ class MyGame(arcade.Window):
         # draw spades playing cards
         for card in PlayingCard.spades.values():
             arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.BLACK)
+            arcade.draw_texture_rectangle(card.x, card.y, card_width, card_height, card.image)
 
         i = 0
         while i < 13:
@@ -152,6 +166,7 @@ class MyGame(arcade.Window):
         # draw clubs playing cards
         for card in PlayingCard.clubs.values():
             arcade.draw_rectangle_filled(card.x, card.y, card_width, card_height, arcade.color.BLACK)
+            arcade.draw_texture_rectangle(card.x, card.y, card_width, card_height, card.image)
 
         i = 0
         while i < 13:
