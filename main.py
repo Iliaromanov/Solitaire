@@ -40,6 +40,7 @@ y_shift = math.floor(HEIGHT / (800/75))
 
 in_game = False
 start_game = False
+you_win = False
 pick_up_card = False
 using_card = None
 card_stacked = False
@@ -137,12 +138,15 @@ class MyGame(arcade.Window):
 
     def on_draw(self):
         arcade.start_render()
-        global start_game, in_game
+        global start_game, in_game, you_win
         global card_height, card_height, card_names
         global deal_slot_x, deal_slot_y, other_slots_x, other_slots_y, all_slots
         global columns, columns_x, columns_y
         global shuffled_cards, deal_slot_cards, dealt_cards
         global shuffle_button_x, shuffle_button_y, shuffle_text_x, shuffle_text_y
+
+        if you_win:
+            arcade.draw_text("YOU WON!!!", columns_x[3], columns_y, color=arcade.color.GREEN, font_size=30, font_name='comic sans')
 
         # draw hearts playing cards
         for card in PlayingCard.hearts.values():
@@ -225,19 +229,24 @@ class MyGame(arcade.Window):
         """
         global HEIGHT, WIDTH
         global shuffled_cards, deal_slot_cards, dealt_cards, all_slots, columns
-        global start_game, in_game
+        global start_game, in_game, you_win
         global deal_slot_x, deal_slot_y, columns_x, columns_y, card_width, card_height, x_shift
         global using_card
 
 
         if start_game:
-            # empties slot lists
+            # reset game
+            you_win = False
+
+            # empty slot lists
             for i in range(4):
                 all_slots[i] = []
-            # empties column lists
+
+            # empty column lists
             for i in range(7):
                 columns[i] = []
-            # empties deal slot list and dealt cards list
+
+            # empty deal slot list and dealt cards list
             deal_slot_cards = []
             dealt_cards = []
 
@@ -301,6 +310,9 @@ class MyGame(arcade.Window):
                     else:
                         c.flipped = False
                 
+        # If all cards have been slotted, the user has won the game!
+        if sum(map(len, all_slots)) == 52:
+            you_win = True
 
     '''
     def on_key_press(self, key, key_modifiers):
