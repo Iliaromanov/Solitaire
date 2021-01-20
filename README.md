@@ -8,6 +8,7 @@ Make sure to install the required Python arcade library by typing the following 
 
 
 Now you may clone this repository using:
+
     git clone https://github.com/Iliaromanov/Solitaire.git
 
 *Make sure to configure git beforehand.
