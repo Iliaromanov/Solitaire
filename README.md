@@ -4,6 +4,7 @@ Recreating the Solitaire card game using the Python Arcade library. In this proj
 
 ## Installation
 Make sure to install the required Python arcade library by typing the following in your command line interface (CLI):
+
     pip install arcade
 
 
