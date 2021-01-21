@@ -17,8 +17,14 @@ Now you may clone this repository using:
 
 *Make sure to configure git beforehand.
 
+### Running the program
 
-Finally, you may run the program in your IDE of choice. Enjoy!
+When you run the program you will be prompted to input the path to the images directory that was cloned to your computer.
+
+A quick and easy way to do this would be to just right-click the images directory and click 'Copy Path'. Then right click in your command line interface where the prompt for the input is.
+
+
+You are now all set! Enjoy!
 
 
 
