@@ -8,12 +8,12 @@ Recreating the Solitaire card game using the Python Arcade library. In this proj
 ## Installation
 1. Make sure to install the required Python arcade library by typing the following in your command line interface (CLI):
 
-    pip install arcade
+        pip install arcade
 
 
 2. Now, you may clone this repository using:
 
-    git clone https://github.com/Iliaromanov/Solitaire.git
+        git clone https://github.com/Iliaromanov/Solitaire.git
 
 *Make sure to configure git beforehand.
 
