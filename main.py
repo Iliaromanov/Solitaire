@@ -54,8 +54,8 @@ shuffled_cards = []
 
 # This section loads required images by asking the user for a path to their images directory
 # sample path: c:/Users/iliarom.BASE.000/Desktop/GitHub/Solitaire/images
-path = input("Please enter path to your images directory (sample path: c:/Users/iliarom.BASE.000/Desktop/GitHub/Solitaire/images): ")
-img_paths = [f"images/{card}" for card in os.listdir(path)]
+## path = input("Please enter path to your images directory (sample path: c:/Users/iliarom.BASE.000/Desktop/GitHub/Solitaire/images): ")
+img_paths = [f"images/{card}" for card in os.listdir("C:/Users/iliarom/Desktop/GitHub/Solitaire/images")]
 card_imgs = {texture: arcade.load_texture(texture) for texture in img_paths}
 
 
