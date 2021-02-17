@@ -1,6 +1,6 @@
 # Solitaire
 
-Recreating the Solitaire card game using the Python Arcade library. In this project, to avoid creating and managing each of the 52 cards in a card deck individually, I made a custom 'Playing_Card' class to create card objects and allow the addition of new functionalities/features with ease.
+I recreated the Solitaire card game by utilizing the Python Arcade library and core Object-Oriented Programming principles within Python. In this project, to avoid creating and managing each of the 52 cards in a card deck individually, I implemented a custom 'Playing_Card' Python class to automate card object creation as well as other card related functionalities.
 
 ## Visuals/Demo
 <img src="demo/gameplay1.gif" width="400" height="350" style="text-align: center" />
