@@ -1,4 +1,4 @@
-<img src="demo/title-img.webp /> 
+<!--<img src="demo/title-img.webp /> -->
 
 # Solitaire
 
