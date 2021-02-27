@@ -1,27 +1,24 @@
 # Solitaire
 
-Recreating the Solitaire card game using the Python Arcade library. In this project, to avoid creating and managing each of the 52 cards in a card deck individually, I made a custom 'Playing_Card' class to create card objects and allow the addition of new functionalities/features with ease.
+I recreated the Solitaire card game by utilizing the Python Arcade library and core Object-Oriented Programming principles within Python.<!-- In this project, to avoid creating and managing each of the 52 cards in a card deck individually, I implemented a custom 'Playing_Card' Python class to automate card object creation as well as other card related functionalities.-->
+
+<img src="https://img.shields.io/badge/-Python-blue" /> <img src="https://img.shields.io/badge/-Python Arcade-orange" />
 
 ## Visuals/Demo
-<img src="demo/gameplay1.gif" width="400" height="350" style="text-align: center" />
+<img align="center" src="demo/gameplay1.gif" width="400" height="350" />
 
 ## Installation
-1. Make sure to install the required Python arcade library by typing the following in your command line interface (CLI):
+2. Install the required Python arcade library by typing the following in your command line interface (CLI):
 
         pip install arcade
 
+*Make sure you are using Python version <= 3.8.7
 
-2. Now, you may clone this repository using:
+2. Clone this repository using:
 
         git clone https://github.com/Iliaromanov/Solitaire.git
 
 *Make sure to configure git beforehand.
-
-### Running the program
-
-When you run the program you will be prompted to input the path to the images directory that was cloned to your computer.
-
-A quick and easy way to do this would be to just right-click the images directory and click 'Copy Path'. Then right click in your command line interface where the prompt for the input is and press enter.
 
 
 You are now all set! Enjoy!
