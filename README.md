@@ -1,4 +1,4 @@
-<img src="demo/title-img.webp" /># Solitaire
+<img src="demo/title-img.webp width="10" height="10" /> # Solitaire
 
 I recreated the Solitaire card game by utilizing the Python Arcade library and core Object-Oriented Programming principles within Python.<!-- In this project, to avoid creating and managing each of the 52 cards in a card deck individually, I implemented a custom 'Playing_Card' Python class to automate card object creation as well as other card related functionalities.-->
 
