@@ -6,24 +6,24 @@ I recreated the Solitaire card game by utilizing the Python Arcade library and c
 
 <img src="https://img.shields.io/badge/-Python-blue" /> <img src="https://img.shields.io/badge/-Python Arcade-orange" />
 
-## ✨ Visuals/Demo
+## Visuals/Demo
 <img src="demo/gameplay1.gif" width="400" height="350" />
 
 ## ⚙ Installation
-2. Install the required Python arcade library by typing the following in your command line interface (CLI):
+1. Install the required Python arcade library:
 
         pip install arcade
 
-*Make sure you are using Python version <= 3.8.7
+<!--*Make sure you are using Python version <= 3.8.7-->
 
 2. Clone this repository using:
 
         git clone https://github.com/Iliaromanov/Solitaire.git
 
-*Make sure to configure git beforehand.
+<!--*Make sure to configure git beforehand.
 
 
-You are now all set! Enjoy!🎉
+You are now all set! Enjoy!🎉-->
 
 
 
