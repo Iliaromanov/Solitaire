@@ -1,8 +1,7 @@
 import arcade
 import math
-import os, os.path
+import os
 import random
-from PIL import Image
 from typing import List
 
 # Game window parameters
