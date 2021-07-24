@@ -471,7 +471,15 @@ class MyGame(arcade.Window):
                         if using_card in columns[i]:
                             columns[i].remove(using_card)
                             for c in using_card.bottom_cards:
-                                columns[i].remove(c)
+                                columns[i].remove(c)                                        # Sometimes error here when moving large stack
+                                '''
+                                  File "c:/Users/iliarom/Desktop/GitHub/Solitaire/main.py", line 474, in on_mouse_release
+                                        columns[i].remove(c)
+                                    ValueError: list.remove(x): x not in list
+
+                                The program does not stop running though. Cards just fail to stack or flip; the lists get messed up.
+                                Looks like its first card below using card (eg. using_card=7, card that fails to be removed is 6)
+                                '''
 
                     # appending cards to top_cards list
                     if card not in using_card.top_cards:
