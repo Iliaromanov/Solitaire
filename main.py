@@ -471,7 +471,7 @@ class MyGame(arcade.Window):
                         if using_card in columns[i]:
                             columns[i].remove(using_card)
                             for c in using_card.bottom_cards:
-                                columns[i].remove(c)                                        # Sometimes error here when moving large stack
+                                columns[i].remove(c)  # <------------------------------------------------------- Sometimes error here when moving large stack
                                 '''
                                   File "c:/Users/iliarom/Desktop/GitHub/Solitaire/main.py", line 474, in on_mouse_release
                                         columns[i].remove(c)
