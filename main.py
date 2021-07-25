@@ -479,6 +479,10 @@ class MyGame(arcade.Window):
                                 The program does not stop running though. Cards just fail to stack or flip; the lists get messed up.
                                 Looks like its first card below using card (eg. using_card=7, card that fails to be removed is 6)
                                 '''
+                                '''
+                                Separate error; not sure if caused by this:
+                                Moving 3 card stack - 6,5,4 onto a 7. 4 moved with it but did not get appended to bottom cards of 7? Had to pick up 4 and put it on the 5 again to register
+                                '''
 
                     # appending cards to top_cards list
                     if card not in using_card.top_cards:
