@@ -20,6 +20,10 @@ Solitaire card game built with the help of the Python Arcade library.<!-- In thi
 
         git clone https://github.com/Iliaromanov/Solitaire.git
 
+3. Run application:
+
+        python main.py
+
 <!--*Make sure to configure git beforehand.
 
 
