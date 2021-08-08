@@ -12,17 +12,19 @@ Solitaire card game built with the help of the Python Arcade library.<!-- In thi
 ## ⚙ Installation
 1. Install the required Python arcade library:
 
-        pip install arcade
+`pip install arcade`
 
 <!--*Make sure you are using Python version <= 3.8.7-->
 
 2. Clone this repository using:
 
-        git clone https://github.com/Iliaromanov/Solitaire.git
+`git clone https://github.com/Iliaromanov/Solitaire.git`
 
 3. Run application:
 
-        python main.py
+`cd Solitaire`
+
+`python main.py`
 
 <!--*Make sure to configure git beforehand.
 
